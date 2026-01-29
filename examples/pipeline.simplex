@@ -1,0 +1,32 @@
+FUNCTION: extract_text(document_path) → ExtractedContent
+
+RULES:
+  - read document from path
+  - extract text content preserving structure
+  - identify document metadata (title, author, date)
+
+DONE_WHEN:
+  - text content is extracted
+  - metadata is populated where available
+
+EXAMPLES:
+  ("report.pdf") → { text: "...", metadata: { title: "Q4 Report" } }
+  ("notes.docx") → { text: "...", metadata: { author: "Jane" } }
+  ("empty.pdf") → { text: "", metadata: {} }
+
+ERRORS:
+  - file not found → "Document not found: {path}"
+  - unsupported format → "Cannot process format: {ext}"
+  - any unhandled condition → fail with descriptive message
+
+WRITES:
+  - SharedMemory.artifacts["extracted_content"]
+  - SharedMemory.status["extraction"] = success | failure
+
+TRIGGERS:
+  - SharedMemory.queue["pending_documents"] is not empty
+  - SharedMemory.status["extraction"] != "in_progress"
+
+HANDOFF:
+  - on success: ExtractedContent ready for summarize_content
+  - on failure: error details with document path for retry queue

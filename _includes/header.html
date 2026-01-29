@@ -1,0 +1,28 @@
+<header class="site-header">
+  <nav class="nav-container">
+    <a href="{{ '/' | relative_url }}" class="logo">
+      <span class="logo-text">Simplex</span>
+      <span class="logo-version">v0.5</span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>Overview</a></li>
+        <li><a href="{{ '/specification/' | relative_url }}" {% if page.url == '/specification/' %}class="active"{% endif %}>Specification</a></li>
+        <li><a href="{{ '/examples/' | relative_url }}" {% if page.url == '/examples/' %}class="active"{% endif %}>Examples</a></li>
+        <li><a href="{{ '/faq/' | relative_url }}" {% if page.url == '/faq/' %}class="active"{% endif %}>FAQ</a></li>
+        <li><a href="https://github.com/brannn/simplex" class="github-link" target="_blank" rel="noopener">GitHub <img src="https://img.shields.io/github/stars/brannn/simplex?style=flat-square&label=&color=555" alt="stars" style="vertical-align: middle; margin-left: 4px;"></a></li>
+      </ul>
+      <div class="theme-toggle">
+        <button type="button" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>

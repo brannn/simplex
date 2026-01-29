@@ -1,0 +1,204 @@
+---
+layout: default
+title: FAQ
+permalink: /faq/
+description: Frequently asked questions about Simplex specification, its design philosophy, usage with autonomous agents, and comparison to other approaches.
+---
+
+<div class="spec-content">
+
+<h1>Frequently Asked Questions</h1>
+
+<nav class="spec-toc">
+  <strong>Contents</strong>
+  <ul>
+    <li><a href="#general">General</a></li>
+    <li><a href="#design">Design Philosophy</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#validation">Validation & Tooling</a></li>
+    <li><a href="#comparison">Comparison to Alternatives</a></li>
+  </ul>
+</nav>
+
+---
+
+<h2 id="general">General</h2>
+
+<h3 class="faq-question">What is Simplex?</h3>
+<p>
+  Simplex is a specification for describing work that autonomous agents will perform. It captures
+  what needs to be done and how to know when it's done, without prescribing how to do it. It's
+  designed to be interpreted by large language models directly, without formal parsing.
+</p>
+
+<h3 class="faq-question">Who is Simplex for?</h3>
+<p>
+  Simplex is for anyone building autonomous agent workflows, whether for software development,
+  document processing, or other domains where agents work for extended periods without human
+  intervention. It's particularly useful when you need specifications that are complete enough
+  to act on without clarification.
+</p>
+
+<h3 class="faq-question">Is Simplex a programming language?</h3>
+<p>
+  No. Simplex has no formal grammar, no parser, and no compilation step. It's a semi-structured
+  text format that LLMs interpret directly using landmarks (structural markers like <code>FUNCTION</code>,
+  <code>RULES</code>, <code>EXAMPLES</code>). This is intentional—a formal grammar would contradict
+  the principle of syntactic tolerance.
+</p>
+
+<h3 class="faq-question">What version is current?</h3>
+<p>
+  Version 0.5 is the current version. It introduces the <code>DETERMINISM</code> landmark for
+  output variance control and consolidates the pillars from six to five. See the
+  <a href="/specification/#version-history">Version History</a> for details on all versions.
+</p>
+
+---
+
+<h2 id="design">Design Philosophy</h2>
+
+<h3 class="faq-question">Why "syntactic tolerance, semantic precision"?</h3>
+<p>
+  LLMs are excellent at understanding intent despite typos, formatting inconsistencies, and
+  notational variations. What they struggle with is ambiguity in meaning. Simplex leans into
+  this: it forgives sloppy notation but requires precise meaning. If an agent would have to
+  guess your intent, the specification is invalid.
+</p>
+
+<h3 class="faq-question">Why are EXAMPLES mandatory?</h3>
+<p>
+  Examples serve multiple purposes: they disambiguate rules, provide test cases, and ground
+  the specification in concrete behavior. If the rules can be interpreted multiple ways,
+  examples resolve the ambiguity. Without them, agents would have to guess what correct
+  output looks like.
+</p>
+
+<h3 class="faq-question">Why is there no composition construct?</h3>
+<p>
+  This is an intentional research hypothesis. Simplex is designed for autonomous workflows
+  where agents operate over extended periods. The hypothesis is that agents can infer task
+  dependencies from context, potentially discovering structures the author didn't anticipate.
+  Prescribed composition would constrain this emergent behavior.
+</p>
+<p>
+  If you need to suggest relationships between functions, use <code>READS</code>/<code>WRITES</code>
+  for data dependencies, <code>TRIGGERS</code> for activation conditions, or <code>HANDOFF</code>
+  for stage transitions.
+</p>
+
+<h3 class="faq-question">What's the deal with DETERMINISM?</h3>
+<p>
+  Added in v0.5, <code>DETERMINISM</code> addresses output reproducibility. When the same
+  specification runs multiple times, should outputs be identical (<code>strict</code>),
+  structurally equivalent (<code>structural</code>), or semantically equivalent (<code>semantic</code>)?
+  This matters for testing, debugging, and pipeline reliability.
+</p>
+
+<h3 class="faq-question">Why complexity limits?</h3>
+<p>
+  Enforced simplicity is a core pillar. Specifications that exceed complexity limits (15 rules,
+  6 inputs, 200 chars per rule) must be decomposed. This is not a limitation, though. It's a forcing
+  function and guardrail against ambiguity. Complexity that cannot be decomposed is complexity that is not yet understood.
+</p>
+
+---
+
+<h2 id="usage">Usage</h2>
+
+<h3 class="faq-question">How do I write a Simplex specification?</h3>
+<p>
+  Start with a <code>FUNCTION</code> block naming your operation. Add <code>RULES</code> describing
+  behavior as outcomes (not steps). Add <code>DONE_WHEN</code> with observable completion criteria.
+  Add <code>EXAMPLES</code> covering every conditional branch in your rules. Add <code>ERRORS</code>
+  specifying failure handling. That's a minimal valid spec.
+</p>
+
+<h3 class="faq-question">What landmarks are required?</h3>
+<p>
+  Five are always required: <code>FUNCTION</code>, <code>RULES</code>, <code>DONE_WHEN</code>,
+  <code>EXAMPLES</code>, and <code>ERRORS</code>. <code>EVAL</code> is conditionally required
+  when <code>BASELINE</code> is present. Everything else is optional.
+</p>
+
+<h3 class="faq-question">When should I use DATA blocks?</h3>
+<p>
+  Use <code>DATA</code> when the shape of inputs or outputs would otherwise be unclear. If your
+  function takes a string and returns a string, you probably don't need DATA. If it takes a
+  PolicyRule with specific fields and constraints, define it.
+</p>
+
+<h3 class="faq-question">What's the difference between BASELINE and greenfield?</h3>
+<p>
+  A greenfield spec describes new functionality. An evolutionary spec (with <code>BASELINE</code>)
+  describes changes to existing functionality. BASELINE declares what exists now, what must be
+  preserved, and what is being evolved. Use it when modifying existing systems.
+</p>
+
+<h3 class="faq-question">How do I handle multi-agent coordination?</h3>
+<p>
+  Use <code>READS</code> and <code>WRITES</code> to declare shared state dependencies.
+  Use <code>TRIGGERS</code> to specify when an agent should pick up work. Use <code>HANDOFF</code>
+  to describe what the next stage receives. Agents coordinate through shared memory without
+  central orchestration.
+</p>
+
+---
+
+<h2 id="validation">Validation & Tooling</h2>
+
+<h3 class="faq-question">Is there a linter?</h3>
+<p>
+  Yes. The <a href="https://github.com/brannn/simplex/tree/main/lint">Simplex linter</a> validates
+  structural requirements (required landmarks present), complexity limits (rule counts, input counts),
+  and semantic criteria (example coverage). It produces errors, warnings, and suggestions.
+</p>
+
+<h3 class="faq-question">What does the linter check?</h3>
+<ul>
+  <li>Structural: At least one FUNCTION, required landmarks present, EVAL when BASELINE exists</li>
+  <li>Complexity: Rules count, input count, rule length, function count</li>
+  <li>Semantic: Example coverage for rule branches, DETERMINISM level validity</li>
+  <li>Evolution: BASELINE and EVAL field requirements when present</li>
+</ul>
+
+<h3 class="faq-question">Can I use Simplex with my existing agent framework?</h3>
+<p>
+  Yes. Simplex is a specification format, not an agent framework. Your agents read Simplex specs
+  as input and interpret them. The spec is agnostic to how agents are implemented, what language
+  they use, or what orchestration approach you take.
+</p>
+
+---
+
+<h2 id="comparison">Comparison to Alternatives</h2>
+
+<h3 class="faq-question">How is Simplex different from prompting?</h3>
+<p>
+  Prompts are conversational and often assume back-and-forth clarification. Simplex specs are
+  complete—they contain everything an agent needs to act without additional context. This is
+  essential for autonomous workflows where agents work for extended periods.
+</p>
+
+<h3 class="faq-question">How is Simplex different from programming languages?</h3>
+<p>
+  Programming languages describe how to do something. Simplex describes what to do and how to
+  verify it's done. This leaves implementation choices to agents, who may discover better
+  approaches than the spec author anticipated.
+</p>
+
+<h3 class="faq-question">How is Simplex different from formal specification languages?</h3>
+<p>
+  Formal specifications (TLA+, Z, Alloy) are mathematically precise but require specialized
+  knowledge to write and verify. Simplex is designed for LLM interpretation with syntactic
+  tolerance—it's accessible to anyone who can describe behavior in semi-structured prose.
+</p>
+
+<h3 class="faq-question">Should I use Simplex or just write better prompts?</h3>
+<p>
+  For one-off tasks with human supervision, prompts are fine. For autonomous workflows where
+  agents work independently for extended periods, Simplex provides the structure and completeness
+  that prompts lack. The decision depends on your use case.
+</p>
+
+</div>

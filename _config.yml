@@ -1,0 +1,35 @@
+title: Simplex
+description: A workflow specification for autonomous agents
+url: https://brannn.github.io
+baseurl: /simplex
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Theme settings
+remote_theme: null
+
+# Exclude from build
+exclude:
+  - lint/
+  - spec/
+  - Makefile
+  - "*.go"
+  - go.mod
+  - go.sum
+  - LICENSE
+  - QUICKSTART.md
+
+# Collections
+collections:
+  examples:
+    output: true
+    permalink: /examples/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

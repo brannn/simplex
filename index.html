@@ -1,0 +1,139 @@
+---
+layout: default
+title: Home
+description: Simplex is a workflow specification for autonomous AI agents. Describe what needs to be done, not how to do it. Enable agents to work autonomously for extended periods.
+---
+
+<div class="spec-content hero-intro">
+  <h1>Simplex</h1>
+  <p>
+    Simplex is a workflow specification for autonomous agents. It describes what needs
+    to be done and how to verify completion, without prescribing how to do it. Agents receive
+    instructions complete enough to act on for extended periods, yet flexible enough to allow
+    emergent problem-solving.
+  </p>
+  <div class="hero-cta">
+    <a href="{{ '/specification/' | relative_url }}" class="btn btn-primary">Read the Spec</a>
+    <a href="{{ '/examples/' | relative_url }}" class="btn btn-secondary">See Examples</a>
+  </div>
+</div>
+<p style="font-style: italic; color: #666; max-width: 800px; margin: 1rem auto 2rem; padding: 0 1rem;">
+  Simplex is research infrastructure for studying emergent software architecture in agent swarms. The spec's generality and vagueness about implementation detail and coordination is intentional. The enforced simplicity functions as an experimental control to study outputs of Simplex-driven workflows.
+</p>
+
+<section class="content-section" style="padding-top: 0;">
+  <h2>The Specification Gap</h2>
+  <p class="section-tagline">What's missing between human intent and agent execution</p>
+  <p>
+    An observed trend in AI development is the creation of new programming languages optimized
+    for LLM code generation. The premise is reasonable: LLMs make syntax errors
+    and struggle with operator precedence, so cleaner languages with unambiguous syntax should help.
+  </p>
+  <p>
+    However, this is a problem that LLMs largely do not have.
+  </p>
+  <p>
+    LLMs are excellent at syntax. They've seen billions of lines of code in every language.
+    What they struggle with is understanding intent, constraints, and edge cases. A new language
+    with cleaner syntax addresses the easy part while leaving the hard part, specification,
+    entirely in natural language prompts.
+  </p>
+  <p>
+    The real bottleneck lies not in code generation, but in specification: expressing what we
+    want clearly enough for autonomous systems to act on without interactive clarification.
+  </p>
+</section>
+
+
+<section class="content-section">
+  <h2>What Simplex Is</h2>
+  <p>
+    Simplex is a specification for autonomous agents that describes work rather than
+    workers, capturing what needs to be done and how to know when it's done without prescribing
+    how to do it.
+  </p>
+  <p>
+    Simplex has no formal grammar. It uses landmarks, structural markers like
+    <code>FUNCTION</code>, <code>RULES</code>, <code>DONE_WHEN</code>, and <code>EXAMPLES</code>,
+    that LLMs recognize and interpret directly. Syntax is forgiving; meaning must be precise.
+  </p>
+
+  <div class="example-block">
+    <div class="example-header">Example: E-commerce Checkout</div>
+    <pre><code>FUNCTION: process_checkout(cart, customer, payment) → CheckoutResult
+
+RULES:
+  - verify cart is not empty and all items are in stock
+  - validate customer shipping address with postal service
+  - apply discount codes and calculate final total
+  - authorize payment for the calculated amount
+  - reserve inventory for purchased items
+  - generate order confirmation with tracking number
+
+DONE_WHEN:
+  - order is persisted with confirmed payment, or
+  - checkout fails with specific reason at point of failure
+
+EXAMPLES:
+  (valid_cart, verified_customer, good_card)
+    → { success: true, order_id: "ORD-12345", total: 99.50 }
+  (empty_cart, any, any)
+    → { success: false, reason: "cart is empty" }
+  (valid_cart, unverified_address, any)
+    → { success: false, reason: "address verification failed" }
+
+ERRORS:
+  - payment gateway timeout → retry once, then fail
+  - inventory changed during checkout → fail with "cart contents changed"
+  - any unhandled condition → fail with descriptive message</code></pre>
+  </div>
+</section>
+
+<section id="pillars" class="content-section" style="background: var(--color-bg-secondary); max-width: none; padding-left: 2rem; padding-right: 2rem;">
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <h2><a href="#pillars" class="anchor-link">Five Pillars</a></h2>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <h3>Enforced Simplicity</h3>
+        <p>Complex specifications must be decomposed into smaller pieces. If something cannot be expressed simply, it is not yet understood well enough to specify.</p>
+      </div>
+      <div class="pillar-card">
+        <h3>Syntactic Tolerance</h3>
+        <p>Simplex allows for typos and formatting inconsistencies while requiring unambiguous meaning. Sloppy notation is acceptable; vague meaning is not.</p>
+      </div>
+      <div class="pillar-card">
+        <h3>Testability</h3>
+        <p>Concrete examples are required for every function. These serve as contracts and ground truth for agent behavior.</p>
+      </div>
+      <div class="pillar-card">
+        <h3>Completeness</h3>
+        <p>Specifications must be sufficient without clarification. No back-and-forth, no requests for additional context.</p>
+      </div>
+      <div class="pillar-card">
+        <h3>Implementation Autonomy</h3>
+        <p>Simplex describes behavior and constraints, never implementation. Algorithms, data structures, and technology choices belong to agents.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section">
+  <h2>Why This Matters</h2>
+  <p>
+    Autonomous agent workflows are maturing. Agents now work for extended periods,
+    developing applications, iterating on solutions, evaluating versions among themselves, and
+    producing release candidates. These kinds of workflows need instructions that are complete enough to
+    act on yet flexible enough to allow emergent problem-solving.
+  </p>
+  <p>
+    Simplex is designed for this context: a human writes a specification that agents interpret,
+    decompose, and execute autonomously. The specification serves as the contract between human
+    intent and machine action.
+  </p>
+  <p>
+    Perhaps what matters most is not how LLMs write code, but how humans express what they want
+    built. A specification designed for human authors, one that captures intent precisely
+    enough for autonomous agents to act on, may prove more valuable than any improvements to code
+    generation itself.
+  </p>
+</section>
