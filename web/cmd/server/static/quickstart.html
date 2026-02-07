@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - Write Your First AI Agent Specification with Simplex</title>
+    <meta name="description" content="Write your first LLM agent specification in minutes with Simplex. Learn the required landmarks for agentic coding — FUNCTION, RULES, DONE_WHEN, EXAMPLES, ERRORS — and start defining autonomous AI agent workflows for Claude, GPT, and any coding agent.">
+    <meta name="keywords" content="agentic coding quickstart, LLM specification tutorial, AI agent specification guide, autonomous coding guide, write agent specifications, Claude agent setup, GPT agent workflow, coding agent tutorial, AI-native development">
+    <link rel="canonical" href="https://simplex-spec.org/quickstart">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Quick Start - Write Your First AI Agent Specification">
+    <meta property="og:description" content="Write your first LLM agent specification in minutes. Learn the required landmarks for agentic coding and start defining autonomous AI agent workflows.">
+    <meta property="og:url" content="https://simplex-spec.org/quickstart">
+    <meta property="og:site_name" content="Simplex">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Quick Start - AI Agent Specification with Simplex">
+    <meta name="twitter:description" content="Write your first LLM agent specification in minutes. Start defining autonomous AI agent workflows for Claude, GPT, and any coding agent.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-500FW8GVFN"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-500FW8GVFN');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-content">
+                <a href="/" class="nav-logo">
+                    <span class="logo-text">Simplex</span>
+                    <span class="version-badge">v0.5</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/spec" class="nav-link">Specification</a>
+                    <a href="/examples" class="nav-link">Examples</a>
+                    <a href="/quickstart" class="nav-link active">Quick Start</a>
+                    <a href="/planner" class="nav-link">Planner</a>
+                    <a href="https://github.com/brannn/simplex" class="nav-link" target="_blank">GitHub <span class="github-star-count" id="github-stars"></span></a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <main class="doc-content">
+            <div class="doc-container">
+                <h1 class="doc-title">Quick Start</h1>
+                <p class="doc-intro">A Simplex specification describes what a function should do using landmarks.</p>
+
+                <!-- Example Specification -->
+                <section class="doc-section">
+                    <h2>A Minimal Specification</h2>
+                    <p>Here is a complete, minimal Simplex specification. It uses all five required landmarks to describe a single function:</p>
+
+                    <details>
+                        <summary>View Specification</summary>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-language">simplex</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><code>FUNCTION: add(a, b) → sum
+
+RULES:
+  - return the sum of a and b
+
+DONE_WHEN:
+  - result equals a + b
+
+EXAMPLES:
+  (2, 3) → 5
+  (0, 0) → 0
+
+ERRORS:
+  - non-numeric input → "Inputs must be numbers"</code></pre>
+                        </div>
+                    </details>
+                </section>
+
+                <!-- Required Landmarks -->
+                <section class="doc-section">
+                    <h2>Required Landmarks</h2>
+                    <p>Every function needs these five sections:</p>
+
+                    <div class="landmark-cards">
+                        <div class="landmark-card">
+                            <div class="pillar-icon" style="background: rgba(218, 119, 86, 0.15);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <div class="landmark-card-text">
+                                <span class="landmark-card-name">FUNCTION</span>
+                                <span class="landmark-card-desc">Signature and return type</span>
+                            </div>
+                        </div>
+                        <div class="landmark-card">
+                            <div class="pillar-icon" style="background: rgba(232, 149, 110, 0.15);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-warm)" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h12"/></svg>
+                            </div>
+                            <div class="landmark-card-text">
+                                <span class="landmark-card-name">RULES</span>
+                                <span class="landmark-card-desc">What the function does</span>
+                            </div>
+                        </div>
+                        <div class="landmark-card">
+                            <div class="pillar-icon" style="background: rgba(212, 149, 107, 0.15);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <div class="landmark-card-text">
+                                <span class="landmark-card-name">DONE_WHEN</span>
+                                <span class="landmark-card-desc">Success criteria</span>
+                            </div>
+                        </div>
+                        <div class="landmark-card">
+                            <div class="pillar-icon" style="background: rgba(196, 96, 62, 0.15);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-rust)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            </div>
+                            <div class="landmark-card-text">
+                                <span class="landmark-card-name">EXAMPLES</span>
+                                <span class="landmark-card-desc">Input/output pairs</span>
+                            </div>
+                        </div>
+                        <div class="landmark-card">
+                            <div class="pillar-icon" style="background: rgba(218, 119, 86, 0.15);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            </div>
+                            <div class="landmark-card-text">
+                                <span class="landmark-card-name">ERRORS</span>
+                                <span class="landmark-card-desc">Failure cases</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <p>A minimal valid spec consists of a function with rules, completion criteria, examples, and error handling. Optional landmarks (DATA, CONSTRAINT, BASELINE, EVAL, READS, WRITES, TRIGGERS, NOT_ALLOWED, HANDOFF, UNCERTAIN, DETERMINISM) add precision when needed, but their absence does not invalidate a spec. See the <a href="/spec" class="btn-link">full specification</a> for details on all sixteen landmarks.</p>
+                </section>
+
+                <!-- Validate with the Linter -->
+                <section class="doc-section">
+                    <h2>Validate with the Linter</h2>
+                    <p>Use the Simplex linter to check that your specification meets structural and semantic requirements:</p>
+
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><code>cd lint
+make build
+./bin/simplex-lint ../examples/minimal.simplex</code></pre>
+                    </div>
+
+                    <p>The linter enforces the "enforced simplicity" pillar through concrete limits and checks. A spec that passes linting has met the structural and semantic requirements for validity.</p>
+                </section>
+
+                <!-- Writing Tips -->
+                <section class="doc-section">
+                    <h2>Writing Tips</h2>
+                    <p>Guidance derived from the specification's recommended workflow:</p>
+
+                    <div class="step-by-step">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Start with the function signature and examples</h3>
+                                <p>The examples force clarity about inputs and outputs before you describe behavior. Many specification errors become obvious when you try to write concrete examples.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Write rules as behavior, not implementation</h3>
+                                <p>Describe what should be true of the output, not how to compute it. If you catch yourself writing "loop through" or "create a variable," step back.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Make completion criteria observable</h3>
+                                <p>DONE_WHEN criteria should be observable from outside the function. "Internal data structure is consistent" is not observable. "Output contains no duplicates" is observable.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3>Specify error handling explicitly</h3>
+                                <p>At minimum, specify that unhandled conditions fail with descriptive messages. For functions with known failure modes, map specific conditions to specific responses.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h3>Decompose when it gets unwieldy</h3>
+                                <p>Multiple simple specs are better than one complex spec. If the linter flags complexity errors, that is a signal to break the work into smaller pieces.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Experimental Planner -->
+                <section class="doc-section">
+                    <h2>Assisted Generation</h2>
+                    <p>For assisted specification generation, you can try the experimental <a href="/planner" class="btn-link">planner</a>. It provides an interactive dialogue to help draft Simplex specifications. Manual writing remains the primary approach; the planner is an optional aid for exploring the format.</p>
+                </section>
+
+                <!-- Next Steps -->
+                <section class="doc-section">
+                    <h2>Next Steps</h2>
+                    <div class="next-steps">
+                        <a href="/spec" class="btn btn-secondary">Full Specification</a>
+                        <a href="/examples" class="btn btn-secondary">Examples</a>
+                        <a href="https://github.com/brannn/simplex" class="btn btn-secondary" target="_blank">GitHub</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/spec">Specification</a></li>
+                        <li><a href="/examples">Examples</a></li>
+                        <li><a href="/quickstart">Quick Start</a></li>
+                        <li><a href="/planner">Planner</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/brannn/simplex" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/QUICKSTART.md" target="_blank">Quick Start Guide</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/spec/simplex.md" target="_blank">Canonical Spec</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Simplex v0.5</h4>
+                    <p class="footer-text">A workflow specification for autonomous agents.</p>
+                    <p class="footer-text footer-license">Released under the MIT License</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+</body>
+</html>

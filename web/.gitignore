@@ -1,0 +1,14 @@
+# Binary
+simplex-web
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Fly.io
+.fly/
+fly_*.toml
+
+# Logs
+*.log

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplex Planner - AI-Powered Agent Specification Generator</title>
+    <meta name="description" content="Generate LLM agent specifications with AI assistance. Draft autonomous coding workflows for Claude, GPT, and any coding agent. Describe your system, refine through conversation, and produce a complete agentic coding specification.">
+    <meta name="keywords" content="AI specification generator, LLM agent planner, agentic coding tool, autonomous agent specification generator, AI workflow generator, coding agent spec builder, Claude workflow planner, GPT specification tool">
+    <link rel="canonical" href="https://simplex-spec.org/planner">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Simplex Planner - AI-Powered Agent Specification Generator">
+    <meta property="og:description" content="Generate LLM agent specifications with AI assistance. Draft autonomous coding workflows for Claude, GPT, and any coding agent.">
+    <meta property="og:url" content="https://simplex-spec.org/planner">
+    <meta property="og:site_name" content="Simplex">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Simplex Planner - AI Agent Spec Generator">
+    <meta name="twitter:description" content="Generate LLM agent specifications with AI. Draft autonomous coding workflows for Claude, GPT, and any coding agent.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-500FW8GVFN"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-500FW8GVFN');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-content">
+                <a href="/" class="nav-logo">
+                    <span class="logo-text">Simplex</span>
+                    <span class="version-badge">v0.5</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/spec" class="nav-link">Specification</a>
+                    <a href="/examples" class="nav-link">Examples</a>
+                    <a href="/quickstart" class="nav-link">Quick Start</a>
+                    <a href="/planner" class="nav-link active">Planner</a>
+                    <a href="https://github.com/brannn/simplex" class="nav-link" target="_blank">GitHub <span class="github-star-count" id="github-stars"></span></a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="planner-main">
+            <div class="wizard-container">
+                <h1 class="planner-title">Draft a Simplex specification</h1>
+                <p class="planner-disclaimer">Simplex specifications can and should be written by hand. This tool provides optional assistance for exploration and drafting.</p>
+
+                <nav class="planner-steps">
+                    <span class="planner-step active" data-step="1">Describe</span>
+                    <span class="planner-step-sep">/</span>
+                    <span class="planner-step" data-step="2">Refine</span>
+                    <span class="planner-step-sep">/</span>
+                    <span class="planner-step" data-step="3">Generate</span>
+                </nav>
+
+                <div class="wizard-content">
+                    <!-- Describe Step -->
+                    <div class="wizard-step" id="step-describe">
+                        <h2>Describe Your System</h2>
+                        <p class="step-description">Start by describing what you want to build at a high level.</p>
+
+                        <div class="type-toggle">
+                            <button class="type-toggle-option active" id="type-greenfield" onclick="setProjectType('greenfield')" title="New project from scratch">Greenfield</button>
+                            <button class="type-toggle-option" id="type-brownfield" onclick="setProjectType('brownfield')" title="Evolving an existing system">Brownfield</button>
+                        </div>
+
+                        <div class="input-container">
+                            <textarea
+                                id="describe-input"
+                                placeholder="Example: A function that authenticates users by email and password, returning user data on success or an error on failure..."
+                                rows="4"
+                            ></textarea>
+                        </div>
+                        <div class="example-pills">
+                            <span class="example-pills-label">Try an example:</span>
+                            <button class="example-pill" onclick="loadExample('minimal')">Minimal</button>
+                            <button class="example-pill" onclick="loadExample('auth')">Auth</button>
+                            <button class="example-pill" onclick="loadExample('cart')">Cart</button>
+                            <button class="example-pill" onclick="loadExample('evolution')">Evolution</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="goToStep('refine')">
+                            Continue &rarr;
+                        </button>
+                    </div>
+
+                    <!-- Refine Step -->
+                    <div class="wizard-step hidden" id="step-refine">
+                        <h2>Refine Requirements</h2>
+                        <p class="step-description">Clarifying questions help produce a more complete specification.</p>
+                        <div class="chat-messages" id="chat-messages"></div>
+                        <div class="chat-input-container">
+                            <textarea
+                                id="chat-input"
+                                placeholder="Type your response..."
+                                rows="3"
+                            ></textarea>
+                            <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
+                        </div>
+                        <a class="skip-link" href="javascript:void(0)" onclick="goToStep('generate')">Skip to generation &rarr;</a>
+                    </div>
+
+                    <!-- Generate Step -->
+                    <div class="wizard-step hidden" id="step-generate">
+                        <h2>Generated Specification</h2>
+                        <p class="step-description">Review and refine the generated specification as needed.</p>
+                        <div class="spec-output" id="spec-output"></div>
+
+                        <details class="lint-results" id="lint-results" style="display: none;">
+                            <summary class="lint-header">
+                                <span class="lint-header-text">Validation</span>
+                                <span class="lint-badge" id="lint-badge"></span>
+                            </summary>
+                            <div class="lint-items" id="lint-items"></div>
+                        </details>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="generateSpecification()">Regenerate</button>
+                            <button class="btn btn-secondary" onclick="copySpec()">Copy</button>
+                            <button class="btn btn-secondary" onclick="downloadSpec()">Download</button>
+                            <button class="btn btn-secondary" onclick="startOver()">Start Over</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reference button -->
+            <button class="ref-trigger" onclick="toggleRefModal()" title="Simplex Reference">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                <span>Reference</span>
+            </button>
+
+            <!-- Reference modal -->
+            <div class="ref-modal-overlay hidden" id="ref-modal" onclick="closeRefModalOnOverlay(event)">
+                <div class="ref-modal">
+                    <div class="ref-modal-header">
+                        <div class="ref-modal-tabs">
+                            <button class="ref-tab active" onclick="switchRefTab('landmarks')">Landmarks</button>
+                            <button class="ref-tab" onclick="switchRefTab('examples')">Examples</button>
+                        </div>
+                        <button class="ref-modal-close" onclick="toggleRefModal()">&times;</button>
+                    </div>
+                    <div class="ref-modal-body">
+                        <div class="ref-tab-content active" id="ref-tab-landmarks">
+                            <div class="ref-section-label">Required</div>
+                            <div class="landmark-cards">
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">FUNCTION</span>
+                                        <span class="landmark-card-desc">name(inputs) &rarr; return type</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">RULES</span>
+                                        <span class="landmark-card-desc">Behavioral outcomes, not steps</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">DONE_WHEN</span>
+                                        <span class="landmark-card-desc">Observable completion criteria</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">EXAMPLES</span>
+                                        <span class="landmark-card-desc">Concrete input/output pairs</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">ERRORS</span>
+                                        <span class="landmark-card-desc">Failure cases + catch-all</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ref-section-label">Optional</div>
+                            <div class="landmark-cards">
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">DATA</span>
+                                        <span class="landmark-card-desc">Type shape definitions</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">CONSTRAINT</span>
+                                        <span class="landmark-card-desc">Global invariants</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">BASELINE / EVAL</span>
+                                        <span class="landmark-card-desc">Evolutionary specs (brownfield)</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">DETERMINISM</span>
+                                        <span class="landmark-card-desc">strict | structural | semantic</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">READS / WRITES</span>
+                                        <span class="landmark-card-desc">Shared memory consumed or produced</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">NOT_ALLOWED</span>
+                                        <span class="landmark-card-desc">Boundaries the function must not cross</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">TRIGGERS / HANDOFF</span>
+                                        <span class="landmark-card-desc">Agent coordination signals</span>
+                                    </div>
+                                </div>
+                                <div class="landmark-card">
+                                    <div class="landmark-card-text">
+                                        <span class="landmark-card-name">UNCERTAIN</span>
+                                        <span class="landmark-card-desc">Conditions for signaling low confidence</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ref-tab-content" id="ref-tab-examples">
+                            <div class="ref-example" onclick="loadExample('minimal'); toggleRefModal();">
+                                <div class="ref-example-name">Minimal Function</div>
+                                <div class="ref-example-desc">A greeting function with basic rules and examples.</div>
+                                <span class="ref-example-tag">greenfield</span>
+                            </div>
+                            <div class="ref-example" onclick="loadExample('auth'); toggleRefModal();">
+                                <div class="ref-example-name">User Authentication</div>
+                                <div class="ref-example-desc">Email/password auth with DATA types for User and AuthResult.</div>
+                                <span class="ref-example-tag">greenfield</span>
+                            </div>
+                            <div class="ref-example" onclick="loadExample('cart'); toggleRefModal();">
+                                <div class="ref-example-name">Shopping Cart</div>
+                                <div class="ref-example-desc">Multi-function spec: add items, remove items, calculate total.</div>
+                                <span class="ref-example-tag">greenfield</span>
+                            </div>
+                            <div class="ref-example" onclick="loadExample('evolution'); toggleRefModal();">
+                                <div class="ref-example-name">Auth Modernization</div>
+                                <div class="ref-example-desc">Evolve session auth to JWT with BASELINE and EVAL landmarks.</div>
+                                <span class="ref-example-tag">brownfield</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/spec">Specification</a></li>
+                        <li><a href="/examples">Examples</a></li>
+                        <li><a href="/quickstart">Quick Start</a></li>
+                        <li><a href="/planner">Planner</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/brannn/simplex" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/QUICKSTART.md" target="_blank">Quick Start Guide</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/spec/simplex.md" target="_blank">Canonical Spec</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Simplex v0.5</h4>
+                    <p class="footer-text">A workflow specification for autonomous agents.</p>
+                    <p class="footer-text footer-license">Released under the MIT License</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/simplex-spec.js"></script>
+    <script src="js/linter.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

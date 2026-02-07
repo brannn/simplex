@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building AI Ops for Autonomous Software Development - Runcell</title>
+    <meta name="description" content="How Runcell is building AI operations infrastructure for autonomous software development. Agentic coding at scale — orchestrating LLM agents, coding agents, and multi-agent systems for production AI workflows.">
+    <meta name="keywords" content="AI ops, autonomous software development, agentic coding infrastructure, LLM agent orchestration, coding agent operations, multi-agent systems, AI-driven development, production AI workflows, agent infrastructure">
+    <link rel="canonical" href="https://simplex-spec.org/article">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Building AI Ops for Autonomous Software Development">
+    <meta property="og:description" content="How Runcell is building AI operations infrastructure for autonomous software development. Agentic coding at scale with LLM agents and multi-agent systems.">
+    <meta property="og:url" content="https://simplex-spec.org/article">
+    <meta property="og:site_name" content="Simplex">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Building AI Ops for Autonomous Software Development">
+    <meta name="twitter:description" content="AI operations infrastructure for agentic coding at scale. Orchestrating LLM agents and multi-agent systems for production workflows.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-500FW8GVFN"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-500FW8GVFN');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Self-contained design tokens */
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --text-primary: #f0f0f5;
+            --text-secondary: #9898a8;
+            --text-muted: #5a5a6e;
+            --accent-orange: #da7756;
+            --accent-warm: #e8956e;
+            --accent-green: #10b981;
+            --accent-yellow: #fbbf24;
+            --accent-amber: #d4956b;
+            --accent-rust: #c4603e;
+            --accent-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Article layout */
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 32px 80px;
+        }
+
+        /* Hero */
+        .doc-hero {
+            margin-bottom: 48px;
+        }
+
+        .doc-hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .doc-hero .page-subtitle {
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 680px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .article-meta svg {
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+        }
+
+        /* Sections */
+        .doc-section {
+            margin-bottom: 48px;
+        }
+
+        .doc-section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .section-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Text */
+        .doc-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .doc-text strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .doc-text em {
+            font-style: italic;
+        }
+
+        .doc-text a {
+            color: var(--accent-orange);
+            text-decoration: none;
+        }
+
+        .doc-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Inline code */
+        .doc-text code,
+        .doc-list code,
+        .pillar-card code {
+            font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2px 7px;
+            border-radius: 4px;
+            color: var(--accent-rust);
+        }
+
+        /* Lists */
+        .doc-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .doc-list li {
+            position: relative;
+            padding: 8px 0 8px 28px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .doc-list li::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 16px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+        }
+
+        .doc-list li strong {
+            color: var(--text-primary);
+        }
+
+        /* Callout */
+        .callout {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .callout-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--text-secondary);
+        }
+
+        .callout-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            margin-top: 1px;
+            color: var(--accent-orange);
+        }
+
+        /* Divider */
+        .doc-divider {
+            border: none;
+            border-top: 1px solid var(--border-subtle);
+            margin: 40px 0;
+        }
+
+        /* Pillar cards */
+        .pillar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .pillar-card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .pillar-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .pillar-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .pillar-header-text {
+            flex: 1;
+        }
+
+        .pillar-number {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .pillar-title {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .pillar-card-body {
+            padding: 20px 24px;
+        }
+
+        .pillar-card-body .doc-text {
+            font-size: 14px;
+        }
+
+        .pillar-card-body .doc-list li {
+            font-size: 13px;
+        }
+
+        /* Workflow timeline */
+        .workflow-steps {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 24px;
+        }
+
+        .workflow-steps::before {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            background: var(--border-subtle);
+        }
+
+        .workflow-step {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .workflow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .workflow-step-dot {
+            position: absolute;
+            left: -28px;
+            top: 4px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            border: 2px solid;
+            background: var(--bg-dark);
+        }
+
+        .workflow-step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .workflow-step-title span {
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-left: 6px;
+            font-size: 12px;
+        }
+
+        .workflow-step-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Highlight grid */
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .highlight-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .highlight-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .highlight-card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .highlight-card-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .highlight-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .highlight-card-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Impact items */
+        .impact-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .impact-item:last-child {
+            border-bottom: none;
+        }
+
+        .impact-bar {
+            width: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .impact-body {
+            flex: 1;
+        }
+
+        .impact-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .impact-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 900px) {
+            .highlight-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Acknowledgments */
+        .acknowledgments {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .acknowledgments-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .acknowledgments-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 20px;
+            list-style: none;
+        }
+
+        .acknowledgments-list li {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .article-container {
+                padding: 40px 20px 60px;
+            }
+            .doc-hero h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <div class="doc-hero">
+            <h1>Building AI Ops</h1>
+            <p class="page-subtitle">A journey to safe, governed, autonomous software development &mdash; from concept to production-ready platform.</p>
+            <div class="article-meta">
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    January 2025
+                </span>
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    10 min read
+                </span>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="doc-section">
+            <p class="doc-text">When the <strong>Switch Product Development</strong> organization onboarded Claude Code and its powerful foundation models into our software development lifecycle, it fundamentally changed how we build software. AI agents could now write code, debug issues, and complete complex tasks autonomously with predictable quality guarantees. But this leap forward surfaced a critical question for any enterprise organization: <strong>How do we harness this transformative technology while maintaining safety, consistency, and control?</strong></p>
+
+            <p class="doc-text"><strong>In the course of a month</strong>, the team recognized this gap and responded with notable speed. We built a complete end-to-end AI Ops platform from scratch &mdash; a system that provides the governance, infrastructure, and specifications needed to use AI assistants and agentic coding tools safely, consistently, and productively at scale.</p>
+
+            <p class="doc-text">The question was never <em>whether</em> to adopt AI code assistants &mdash; it was <strong>how to use them safely, consistently, and productively at enterprise scale.</strong></p>
+        </div>
+
+        <hr class="doc-divider">
+
+        <!-- The Four Pillars -->
+        <div class="doc-section">
+            <h2 class="doc-section-title">
+                <span class="section-icon" style="background: rgba(59, 130, 246, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                </span>
+                The Four Pillars
+            </h2>
+
+            <!-- SGA -->
+            <div class="pillar-card">
+                <div class="pillar-card-header">
+                    <div class="pillar-icon" style="background: rgba(59, 130, 246, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="pillar-header-text">
+                        <div class="pillar-number">Pillar 1</div>
+                        <div class="pillar-title">SGA &mdash; Governance Through Policy Compilation</div>
+                    </div>
+                </div>
+                <div class="pillar-card-body">
+                    <p class="doc-text"><strong>SGA (Switch Governed Agents)</strong> eases the governance challenge by transforming organizational policy into runtime guidance that AI assistants automatically follow. Instead of asking developers to continuously remember and teach AI agents our rules and standards, we compile a central policy registry into governance artifacts that load automatically.</p>
+
+                    <p class="doc-text">Policy maintainers define rules, behaviors, skills, and agent templates in a central registry stored in Git. Developers run <code>sga sync</code> to pull the latest policy, then <code>sga apply</code> to compile it into their workspace. This generates:</p>
+
+                    <ul class="doc-list">
+                        <li><strong>Compiled Agents</strong> &mdash; Role-specific prompts like <code>@backend-implementer</code> or <code>@security-reviewer</code> that automatically embed relevant rules</li>
+                        <li><strong>Auto-triggered Skills</strong> &mdash; Domain-specific guidance that activates when AI assistants encounter specific file types or code patterns</li>
+                        <li><strong>Slash Commands</strong> &mdash; On-demand checks like <code>/sga-security</code> for explicit verification</li>
+                        <li><strong>Policy Context</strong> &mdash; Baseline governance awareness that all agents inherit</li>
+                    </ul>
+
+                    <p class="doc-text">This solves three critical problems: <strong>governance without friction</strong> (developers don't need to remember rules), <strong>consistency across teams</strong> (everyone uses the same compiled artifacts), and <strong>adaptability</strong> (policy updates propagate automatically).</p>
+                </div>
+            </div>
+
+            <!-- CNAM -->
+            <div class="pillar-card">
+                <div class="pillar-card-header">
+                    <div class="pillar-icon" style="background: rgba(167, 139, 250, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                    <div class="pillar-header-text">
+                        <div class="pillar-number">Pillar 2</div>
+                        <div class="pillar-title">CNAM &mdash; Persistent Memory for Context Continuity</div>
+                    </div>
+                </div>
+                <div class="pillar-card-body">
+                    <p class="doc-text"><strong>CNAM (Cloud-Native Agentic Memory)</strong> addresses a fundamental limitation of current AI assistants: they lack memory between sessions. Every interaction starts fresh, requiring users to repeatedly provide context. CNAM provides a multi-tenant memory system that AI assistants can query and update as they work through MCP.</p>
+
+                    <ul class="doc-list">
+                        <li><strong>remember</strong> &mdash; Store facts with optional tags, classification, and scope</li>
+                        <li><strong>recall</strong> &mdash; Search memories using semantic similarity, keyword matching, or hybrid approaches</li>
+                        <li><strong>forget</strong> &mdash; Remove specific memories by identifier</li>
+                        <li><strong>list_memories</strong> &mdash; Browse memories with filtering capabilities</li>
+                        <li><strong>share_memory</strong> &mdash; Change scope between personal and organizational</li>
+                        <li><strong>export_memories</strong> &mdash; Export for backup or analysis</li>
+                    </ul>
+
+                    <p class="doc-text">Memories exist at two scopes: <strong>personal</strong> memories visible only to the individual user, and <strong>organizational</strong> memories shared across teams &mdash; enabling both private knowledge accumulation and collective institutional learning. The system classifies memories by type: <strong>factual</strong> (infrastructure standards, configurations, architectural decisions), <strong>experiential</strong> (debugging insights, lessons learned), and <strong>working</strong> (temporary session context that auto-expires). Built on PostgreSQL, Qdrant for vector search, and Ollama for embeddings &mdash; a production-grade cloud-native service with admin console, API key provisioning, and audit logging.</p>
+                </div>
+            </div>
+
+            <!-- Runcell -->
+            <div class="pillar-card">
+                <div class="pillar-card-header">
+                    <div class="pillar-icon" style="background: rgba(16, 185, 129, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <div class="pillar-header-text">
+                        <div class="pillar-number">Pillar 3</div>
+                        <div class="pillar-title">Runcell &mdash; Secure Isolation for Autonomous Execution</div>
+                    </div>
+                </div>
+                <div class="pillar-card-body">
+                    <p class="doc-text"><strong>Runcell</strong> enables the most powerful &mdash; and potentially risky &mdash; capability of AI assistants: autonomous execution. It creates isolated workspace containers where task execution and experimentation happens safely.</p>
+
+                    <p class="doc-text">The architecture introduces a critical distinction: <strong>Outer Agent</strong> versus <strong>Inner Agent</strong>. The outer agent runs in your terminal, orchestrating work and creating workspaces. The inner agent runs inside those workspaces with its own API key, working autonomously on delegated tasks. This separation provides security isolation and enables parallel autonomous workflows.</p>
+
+                    <p class="doc-text">Two deployment modes are supported. <strong>Local mode</strong> runs on individual machines using Podman for fast, network-independent workspace creation. <strong>Remote mode</strong> connects to a centralized Runcell server that orchestrates workspaces as Kubernetes pods, providing centralized management, shared infrastructure, and full audit logging.</p>
+
+                    <p class="doc-text">Security is baked in through multiple layers: containers run as non-root users with dropped capabilities, seccomp profiles restrict dangerous syscalls, cgroups enforce resource limits, and networks can be fully isolated. Credentials are managed securely through the macOS Keychain and injected into containers at runtime.</p>
+                </div>
+            </div>
+
+            <!-- Simplex -->
+            <div class="pillar-card">
+                <div class="pillar-card-header">
+                    <div class="pillar-icon" style="background: rgba(251, 191, 36, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div class="pillar-header-text">
+                        <div class="pillar-number">Pillar 4</div>
+                        <div class="pillar-title">Simplex &mdash; High-Fidelity Specifications for Autonomous Agents</div>
+                    </div>
+                </div>
+                <div class="pillar-card-body">
+                    <p class="doc-text"><strong>Simplex</strong> is a workflow specification designed specifically for autonomous agents. It occupies a crucial middle ground between natural language (too ambiguous) and programming languages (too prescriptive). Simplex captures <em>what</em> needs to be done and <em>how to know when it's done</em>, without prescribing <em>how</em> to do it.</p>
+
+                    <p class="doc-text">The specification uses landmarks &mdash; structural markers like <code>FUNCTION</code>, <code>RULES</code>, <code>DONE_WHEN</code>, <code>EXAMPLES</code>, and <code>ERRORS</code> &mdash; that agents recognize and orient around. Five pillars guide the design:</p>
+
+                    <ul class="doc-list">
+                        <li><strong>Enforced simplicity</strong> &mdash; Complexity that cannot be decomposed is complexity not yet understood</li>
+                        <li><strong>Syntactic tolerance, semantic precision</strong> &mdash; Agents interpret what you meant, but the meaning itself must be unambiguous</li>
+                        <li><strong>Testability</strong> &mdash; Every function requires examples that serve as contracts defining correct output</li>
+                        <li><strong>Completeness</strong> &mdash; Specifications must be sufficient to generate working code without further clarification</li>
+                        <li><strong>Implementation autonomy</strong> &mdash; Simplex describes behavior and constraints, never implementation details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <!-- How It Works Together -->
+        <div class="doc-section">
+            <h2 class="doc-section-title">
+                <span class="section-icon" style="background: rgba(16, 185, 129, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </span>
+                How It Works Together
+            </h2>
+
+            <p class="doc-text">The true power of the platform emerges when these components work in concert. Here's the end-to-end workflow:</p>
+
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="workflow-step-dot" style="border-color: var(--accent-orange);"></div>
+                    <div class="workflow-step-title">Policy Definition &amp; Compilation <span>SGA</span></div>
+                    <div class="workflow-step-desc">Policy maintainers define organizational rules in a central registry. Developers run <code>sga apply</code> to compile policy into their workspace, generating role-specific agents, auto-triggering skills, and baseline governance context.</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-step-dot" style="border-color: var(--accent-amber);"></div>
+                    <div class="workflow-step-title">Context Initialization <span>CNAM</span></div>
+                    <div class="workflow-step-desc">When an AI assistant starts a session, it recalls relevant memories such as project patterns, architectural decisions, and debugging insights that persist from previous sessions, providing immediate context without repetitive explanation.</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-step-dot" style="border-color: var(--accent-green);"></div>
+                    <div class="workflow-step-title">Workspace Creation <span>Runcell</span></div>
+                    <div class="workflow-step-desc">When the AI assistant needs to execute code or interact with systems, it creates an isolated workspace container. Required credentials are injected securely, and the container provides a safe, ephemeral environment.</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-step-dot" style="border-color: var(--accent-yellow);"></div>
+                    <div class="workflow-step-title">Autonomous Execution <span>Simplex + Runcell</span></div>
+                    <div class="workflow-step-desc">For complex tasks, the AI assistant invokes specialized agents compiled via SGA and delegates work to them. These agents may spawn inner agents in separate workspaces, each running autonomously. Simplex specifications provide the high-fidelity instructions they need.</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-step-dot" style="border-color: var(--accent-rust);"></div>
+                    <div class="workflow-step-title">Learning &amp; Evolution <span>CNAM</span></div>
+                    <div class="workflow-step-desc">As work progresses, the AI assistant remembers new patterns, solutions, and decisions. Future sessions benefit from this accumulated knowledge without manual synchronization.</div>
+                </div>
+            </div>
+
+            <p class="doc-text">The <strong>Model Context Protocol (MCP)</strong> serves as the integration layer, standardizing how AI assistants communicate with these systems. CNAM provides MCP tools for memory operations, Runcell provides MCP tools for workspace and file operations, and SGA provides governance context that all agents automatically inherit.</p>
+        </div>
+
+        <hr class="doc-divider">
+
+        <!-- Technical Innovation -->
+        <div class="doc-section">
+            <h2 class="doc-section-title">
+                <span class="section-icon" style="background: rgba(236, 72, 153, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-rust)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </span>
+                Technical Innovation
+            </h2>
+
+            <div class="highlight-grid">
+                <div class="highlight-card">
+                    <div class="highlight-card-icon" style="background: rgba(59, 130, 246, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="highlight-card-title">Compile-Time Governance</div>
+                    <div class="highlight-card-desc">Traditional governance enforces rules at runtime through reviews and linters. SGA compiles governance into the AI assistant's context before any work begins &mdash; shifting from reactive policing to proactive guidance.</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-card-icon" style="background: rgba(167, 139, 250, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                    <div class="highlight-card-title">Semantic Multi-Tenant Memory</div>
+                    <div class="highlight-card-desc">CNAM combines vector-based semantic search with role-based isolation, enabling personal knowledge accumulation and team knowledge sharing. Memory classification by type allows appropriate retention policies.</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-card-icon" style="background: rgba(16, 185, 129, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <div class="highlight-card-title">Inner / Outer Agent Architecture</div>
+                    <div class="highlight-card-desc">The distinction between orchestrator and worker agents, each with isolated workspaces and credentials, enables both security and parallelism. Multiple autonomous agents work concurrently without interference.</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-card-icon" style="background: rgba(251, 191, 36, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                    </div>
+                    <div class="highlight-card-title">LLM-Native Specification Language</div>
+                    <div class="highlight-card-desc">Rather than forcing LLMs to parse formal grammars or ambiguous natural language, Simplex provides structural landmarks that agents recognize, syntactic tolerance for variation, and semantic precision for unambiguous meaning.</div>
+                </div>
+            </div>
+
+            <div class="callout callout-info">
+                <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <span><strong>Cloud-native throughout.</strong> All components are designed for Kubernetes deployment &mdash; CNAM on CloudNativePG with Istio service mesh, Runcell orchestrating workspace pods, SGA artifacts version-controlled as governance-as-code in Git.</span>
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <!-- Business Impact -->
+        <div class="doc-section">
+            <h2 class="doc-section-title">
+                <span class="section-icon" style="background: rgba(251, 191, 36, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                </span>
+                Business Impact
+            </h2>
+
+            <div class="impact-item">
+                <div class="impact-bar" style="background: var(--accent-orange);"></div>
+                <div class="impact-body">
+                    <div class="impact-title">Accelerating Delivery While Maintaining Safety</div>
+                    <div class="impact-desc">By providing governance, memory, and isolation as infrastructure, we accelerate AI assistant adoption without compromising on safety or quality. Developers work more productively, confident that organizational standards are embedded automatically and execution happens in isolated, auditable environments.</div>
+                </div>
+            </div>
+
+            <div class="impact-item">
+                <div class="impact-bar" style="background: var(--accent-amber);"></div>
+                <div class="impact-body">
+                    <div class="impact-title">Scaling AI Capabilities Across Teams</div>
+                    <div class="impact-desc">Policy updates propagate automatically. Shared memory enables organizational knowledge accumulation. Centralized Runcell infrastructure supports team collaboration and audit logging. We're building organizational capability, not just individual productivity.</div>
+                </div>
+            </div>
+
+            <div class="impact-item">
+                <div class="impact-bar" style="background: var(--accent-green);"></div>
+                <div class="impact-body">
+                    <div class="impact-title">Building Competitive Advantage Through Infrastructure</div>
+                    <div class="impact-desc">Most organizations approach AI code assistants as tools to be adopted. We've approached them as infrastructure to be built. Tools provide capabilities; infrastructure provides leverage. By building governance, memory, and isolation as platform services, we create leverage that compounds as adoption grows.</div>
+                </div>
+            </div>
+
+            <div class="impact-item">
+                <div class="impact-bar" style="background: var(--accent-rust);"></div>
+                <div class="impact-body">
+                    <div class="impact-title">Positioning for the Future</div>
+                    <div class="impact-desc">We're seeing the beginning of autonomous agents that can perform complex software tasks independently. Our platform anticipates this &mdash; Simplex for specifications, Runcell for secure execution, CNAM for persistent memory, SGA for governed behavior. We're building the foundation for tomorrow's autonomous development workflows.</div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <!-- Looking Forward -->
+        <div class="doc-section">
+            <h2 class="doc-section-title">
+                <span class="section-icon" style="background: rgba(167, 139, 250, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </span>
+                Looking Forward
+            </h2>
+
+            <p class="doc-text">What this platform enables next is transformative. Organizations can define Simplex specifications for complex software systems and have autonomous agents build them end-to-end, with governance automatically enforced, context accumulated across iterations, and execution safely isolated.</p>
+
+            <p class="doc-text">Teams can share knowledge through CNAM's org-scoped memories, avoiding the rediscovery of solutions to known problems. Policy can evolve centrally and propagate automatically, keeping governance in sync with organizational learning.</p>
+
+            <p class="doc-text">The broader vision for AI Ops is clear: create the infrastructure that enables safe, governed, productive use of AI across the entire software development lifecycle. Now we expand &mdash; integrating with CI/CD pipelines, extending to testing and deployment, enabling multi-agent swarm architectures, and building observability into AI-assisted workflows.</p>
+
+            <p class="doc-text">The question is no longer <em>"Can we use AI assistants?"</em> The question is <strong>"How can we use AI assistants to transform software development?"</strong> With our AI Ops platform, we have the answer.</p>
+        </div>
+
+        <div class="acknowledgments">
+            <p style="font-size: 14px; font-style: italic; color: var(--text-muted); line-height: 1.7;">Special thanks to Logan Broitman, Ahmed Schrute, Steven Shurtliff, Nate Lantz, Leah Hunnewell, Jared Bischoff, and Travis Harrison for their contributions to making this platform a reality.</p>
+        </div>
+
+    </div>
+</body>
+</html>

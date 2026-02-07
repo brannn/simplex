@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplex - Specification Language for Agentic Coding and Autonomous AI Agents</title>
+    <meta name="description" content="Simplex is an open specification language for agentic coding and autonomous software development. Define LLM agent workflows for Claude, GPT, and any coding agent. Describe what to build, not how — enabling AI agents to work autonomously on complex tasks.">
+    <meta name="keywords" content="agentic coding, autonomous software development, AI agent specification, LLM specification language, coding agents, Claude, GPT, AI workflow orchestration, multi-agent systems, agent-native development, autonomous AI agents, AI spec language, agent workflows, AI-driven development">
+    <link rel="canonical" href="https://simplex-spec.org/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Simplex - Specification Language for Agentic Coding and Autonomous AI Agents">
+    <meta property="og:description" content="Open specification language for agentic coding and autonomous software development. Define LLM agent workflows for Claude, GPT, and any coding agent.">
+    <meta property="og:url" content="https://simplex-spec.org/">
+    <meta property="og:site_name" content="Simplex">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Simplex - Specification Language for Agentic Coding and Autonomous AI Agents">
+    <meta name="twitter:description" content="Open specification language for agentic coding and autonomous software development. Define LLM agent workflows for Claude, GPT, and any coding agent.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-500FW8GVFN"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-500FW8GVFN');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-content">
+                <a href="/" class="nav-logo">
+                    <span class="logo-text">Simplex</span>
+                    <span class="version-badge">v0.5</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/spec" class="nav-link">Specification</a>
+                    <a href="/examples" class="nav-link">Examples</a>
+                    <a href="/quickstart" class="nav-link">Quick Start</a>
+                    <a href="/planner" class="nav-link">Planner</a>
+                    <a href="https://github.com/brannn/simplex" class="nav-link" target="_blank">GitHub <span class="github-star-count" id="github-stars"></span></a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Article content -->
+        <main class="doc-content">
+        <article class="article-home">
+
+            <!-- Hero -->
+            <div class="article-hero">
+                <h1 class="hero-title">Simplex</h1>
+                <p class="article-subtitle">Simplex is a specification for describing work that autonomous agents will perform. It captures what needs to be done and how to know when it's done, without prescribing how to do it.</p>
+                <p class="article-subtitle">Simplex is optimized for high-fidelity interpretation by large language models.</p>
+                <div class="hero-actions">
+                    <a href="/spec" class="btn btn-primary btn-sm">Read the Specification</a>
+                    <a href="/examples" class="btn btn-secondary btn-sm">View Examples</a>
+                </div>
+            </div>
+
+            <br>
+
+            <!-- The Specification Gap -->
+            <div class="article-doc-section">
+                <h2 class="article-section-title">
+                    <span class="section-icon" style="background: rgba(218, 119, 86, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </span>
+                    The Specification Gap
+                </h2>
+                <p class="doc-text">An observed trend in AI development is the creation of new programming languages optimized for LLM code generation. The premise is reasonable: LLMs make syntax errors and struggle with operator precedence, so cleaner languages with unambiguous syntax should help.</p>
+                <p class="doc-text"><strong>However, this is a problem that LLMs largely do not have.</strong></p>
+                <p class="doc-text">LLMs are excellent at syntax. They've seen billions of lines of code in every language. What they struggle with is understanding intent, constraints, and edge cases. A new language with cleaner syntax addresses the easy part while leaving the hard part, specification, entirely in natural language prompts.</p>
+                <p class="doc-text">The real bottleneck lies not in code generation, but in specification: expressing what we want clearly enough for autonomous systems to act on without interactive clarification.</p>
+            </div>
+
+            <br>
+
+            <!-- Five Pillars -->
+            <div class="article-doc-section">
+                <h2 class="article-section-title">
+                    <span class="section-icon" style="background: rgba(218, 119, 86, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                    </span>
+                    Five Pillars
+                </h2>
+
+                <div class="article-pillar-card">
+                    <div class="pillar-card-header">
+                        <div class="pillar-icon" style="background: rgba(218, 119, 86, 0.15);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                        </div>
+                        <div class="pillar-header-text">
+                            <div class="pillar-number">Pillar 1</div>
+                            <div class="pillar-title">Enforced Simplicity</div>
+                        </div>
+                    </div>
+                    <div class="pillar-card-body">
+                        <p class="doc-text">Simplex refuses to support constructs that would allow specifications to become unwieldy. If something cannot be expressed simply, it must be decomposed into smaller pieces first. This is a feature, not a limitation. Complexity that cannot be decomposed is complexity that is not yet understood.</p>
+                    </div>
+                </div>
+
+                <div class="article-pillar-card">
+                    <div class="pillar-card-header">
+                        <div class="pillar-icon" style="background: rgba(232, 149, 110, 0.15);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-warm)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div class="pillar-header-text">
+                            <div class="pillar-number">Pillar 2</div>
+                            <div class="pillar-title">Syntactic Tolerance, Semantic Precision</div>
+                        </div>
+                    </div>
+                    <div class="pillar-card-body">
+                        <p class="doc-text">Simplex allows for formatting inconsistencies, typos, and notational variations. Agents interpret what you meant, not what you typed. However, the meaning itself must be unambiguous. If an agent would have to guess your intent, the specification is invalid. Sloppy notation is acceptable; vague meaning is not.</p>
+                    </div>
+                </div>
+
+                <div class="article-pillar-card">
+                    <div class="pillar-card-header">
+                        <div class="pillar-icon" style="background: rgba(212, 149, 107, 0.15);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
+                        <div class="pillar-header-text">
+                            <div class="pillar-number">Pillar 3</div>
+                            <div class="pillar-title">Testability</div>
+                        </div>
+                    </div>
+                    <div class="pillar-card-body">
+                        <p class="doc-text">Every function requires examples. These are not illustrations; they are contracts. The examples define what correct output looks like for given inputs. An agent's work is not complete until its output is consistent with the examples.</p>
+                    </div>
+                </div>
+
+                <div class="article-pillar-card">
+                    <div class="pillar-card-header">
+                        <div class="pillar-icon" style="background: rgba(196, 96, 62, 0.15);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-rust)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div class="pillar-header-text">
+                            <div class="pillar-number">Pillar 4</div>
+                            <div class="pillar-title">Completeness</div>
+                        </div>
+                    </div>
+                    <div class="pillar-card-body">
+                        <p class="doc-text">A valid specification must be sufficient to generate working code without further clarification. This is what distinguishes Simplex from a prompting approach. There is no back-and-forth, no "what did you mean by X?" The spec must stand alone.</p>
+                    </div>
+                </div>
+
+                <div class="article-pillar-card">
+                    <div class="pillar-card-header">
+                        <div class="pillar-icon" style="background: rgba(218, 119, 86, 0.15);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <div class="pillar-header-text">
+                            <div class="pillar-number">Pillar 5</div>
+                            <div class="pillar-title">Implementation Autonomy</div>
+                        </div>
+                    </div>
+                    <div class="pillar-card-body">
+                        <p class="doc-text">Simplex describes behavior and constraints, never implementation. Algorithms, data structures, and technology choices belong to agents. If a spec needs persistent storage, it says so. Whether that becomes a graph database, file system, or something else is the agent's concern. The spec neither prescribes nor cares.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What Simplex Is -->
+            <div class="article-doc-section">
+                <h2 class="article-section-title">
+                    <span class="section-icon" style="background: rgba(218, 119, 86, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </span>
+                    What Simplex Is
+                </h2>
+                <p class="doc-text">Simplex is a specification for autonomous agents that describes work rather than workers, capturing what needs to be done and how to know when it's done without prescribing how to do it.</p>
+                <p class="doc-text">The language has no formal grammar. It uses landmarks&mdash;structural markers like <code>FUNCTION</code>, <code>RULES</code>, <code>DONE_WHEN</code>, and <code>EXAMPLES</code>&mdash;that LLMs recognize and interpret directly. Syntax is forgiving; meaning must be precise.</p>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">simplex</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code>FUNCTION: filter_policies(policies, ids, tags) → filtered list
+
+RULES:
+  - if neither ids nor tags provided, return all policies
+  - if only ids provided, return policies matching those IDs
+  - if only tags provided, return policies with at least one matching tag
+  - if both provided, return union of matches, deduplicated
+
+DONE_WHEN:
+  - returned list contains exactly the policies matching criteria
+  - no duplicates in returned list
+
+EXAMPLES:
+  ([p1, p2, p3], none, none) → [p1, p2, p3]
+  ([p1, p2, p3], [p1.id], none) → [p1]
+  ([p1, p2, p3], none, [python]) → matches with tag
+  ([p1, p2, p3], [p1.id], [python]) → union
+
+ERRORS:
+  - policy ID not found → fail with "unknown policy ID: {id}"
+  - any unhandled condition → fail with descriptive message</code></pre>
+                </div>
+            </div>
+
+            <hr class="doc-divider">
+
+            <!-- Why This Matters -->
+            <div class="article-doc-section">
+                <h2 class="article-section-title">
+                    <span class="section-icon" style="background: rgba(218, 119, 86, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </span>
+                    Why This Matters
+                </h2>
+                <p class="doc-text">Autonomous agent workflows are maturing. Agents now work for extended periods&mdash;hours or days&mdash;developing applications, iterating on solutions, evaluating versions among themselves, and producing release candidates. These kinds of workflows need instructions that are complete enough to act on yet flexible enough to allow emergent problem-solving.</p>
+                <p class="doc-text">Simplex is designed for this context: a human writes a specification that agents interpret, decompose, and execute autonomously. The specification serves as the contract between human intent and machine action.</p>
+                <p class="doc-text">Perhaps what matters most is not how LLMs write code, but how humans express what they want built. A specification designed for human authors, one that captures intent precisely enough for autonomous agents to act on, may prove more valuable than any improvements to code generation itself.</p>
+            </div>
+
+            <hr class="doc-divider">
+
+            <!-- Further Reading -->
+            <div class="article-doc-section">
+                <h2 class="article-section-title">
+                    <span class="section-icon" style="background: rgba(218, 119, 86, 0.15);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </span>
+                    Further Reading
+                </h2>
+                <div class="reading-list">
+                    <a href="/spec" class="reading-item">
+                        <div class="reading-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        </div>
+                        <div class="reading-item-text">
+                            <h3>Specification</h3>
+                            <p>The complete Simplex v0.5 specification: pillars, landmarks, validation criteria, composition, and linter rules.</p>
+                        </div>
+                    </a>
+                    <a href="/examples" class="reading-item">
+                        <div class="reading-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </div>
+                        <div class="reading-item-text">
+                            <h3>Examples</h3>
+                            <p>Simplex specifications at varying levels of complexity, from minimal functions to multi-function coordination and evolutionary specs.</p>
+                        </div>
+                    </a>
+                    <a href="/quickstart" class="reading-item">
+                        <div class="reading-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <div class="reading-item-text">
+                            <h3>Quick Start</h3>
+                            <p>Write your first Simplex specification in minutes. Start with a function signature and examples, then layer in rules and constraints.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </article>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/spec">Specification</a></li>
+                        <li><a href="/examples">Examples</a></li>
+                        <li><a href="/quickstart">Quick Start</a></li>
+                        <li><a href="/planner">Planner</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/brannn/simplex" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/QUICKSTART.md" target="_blank">Quick Start Guide</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/spec/simplex.md" target="_blank">Canonical Spec</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Simplex v0.5</h4>
+                    <p class="footer-text">A workflow specification for autonomous agents.</p>
+                    <p class="footer-text footer-license">Released under the MIT License</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

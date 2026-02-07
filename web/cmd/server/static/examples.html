@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplex Examples - LLM Agent Specifications for Agentic Coding</title>
+    <meta name="description" content="Real-world Simplex specification examples for autonomous AI agents and agentic coding: authentication, shopping cart, data pipelines, and brownfield evolution. Ready-to-use LLM agent workflow templates for Claude, GPT, and coding agents.">
+    <meta name="keywords" content="agentic coding examples, LLM agent workflow examples, AI agent specification templates, autonomous coding examples, Claude agent examples, GPT agent workflows, coding agent specifications, AI-driven development examples">
+    <link rel="canonical" href="https://simplex-spec.org/examples">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Simplex Examples - LLM Agent Specifications for Agentic Coding">
+    <meta property="og:description" content="Ready-to-use specification examples for autonomous AI agents: authentication, shopping cart, data pipelines. Templates for Claude, GPT, and coding agents.">
+    <meta property="og:url" content="https://simplex-spec.org/examples">
+    <meta property="og:site_name" content="Simplex">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Simplex Examples - LLM Agent Specifications">
+    <meta name="twitter:description" content="Real-world LLM agent specification examples for agentic coding. Templates for Claude, GPT, and autonomous coding agents.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-500FW8GVFN"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-500FW8GVFN');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-content">
+                <a href="/" class="nav-logo">
+                    <span class="logo-text">Simplex</span>
+                    <span class="version-badge">v0.5</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/spec" class="nav-link">Specification</a>
+                    <a href="/examples" class="nav-link active">Examples</a>
+                    <a href="/quickstart" class="nav-link">Quick Start</a>
+                    <a href="/planner" class="nav-link">Planner</a>
+                    <a href="https://github.com/brannn/simplex" class="nav-link" target="_blank">GitHub <span class="github-star-count" id="github-stars"></span></a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <main class="doc-content">
+            <div class="doc-container">
+                <h1 class="doc-title">Examples</h1>
+                <p class="doc-intro">These examples demonstrate Simplex specifications at varying levels of complexity. Each shows how to describe work for autonomous agents using landmarks.</p>
+
+                <div class="examples-grid">
+
+                    <!-- 1. Minimal Specification -->
+                    <div class="example-full-card">
+                        <div class="example-card-header">
+                            <h3>Minimal Specification</h3>
+                            <span class="example-tag">minimal</span>
+                        </div>
+                        <p>The simplest valid Simplex spec with all required landmarks. Shows that a complete specification needs only FUNCTION, RULES, DONE_WHEN, EXAMPLES, and ERRORS.</p>
+                        <details>
+                            <summary>View Specification</summary>
+                            <div class="code-example">
+                                <div class="code-header">
+                                    <span class="code-language">simplex</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>FUNCTION: greet(name) → greeting
+
+RULES:
+  - return a greeting that includes the name
+
+DONE_WHEN:
+  - greeting contains the name
+  - greeting is friendly
+
+EXAMPLES:
+  ("Alice") → "Hello, Alice!"
+  ("Bob") → "Hello, Bob!"
+
+ERRORS:
+  - empty name → "Name cannot be empty"</code></pre>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 2. Authentication -->
+                    <div class="example-full-card">
+                        <div class="example-card-header">
+                            <h3>Authentication</h3>
+                            <span class="example-tag">data-types</span>
+                        </div>
+                        <p>User authentication with DATA definitions, READS declarations, and CONSTRAINT. Demonstrates how typed data structures clarify complex inputs and outputs.</p>
+                        <details>
+                            <summary>View Specification</summary>
+                            <div class="code-example">
+                                <div class="code-header">
+                                    <span class="code-language">simplex</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>DATA: User
+  id: string
+  name: string
+  email: string
+  role: "admin" | "member" | "guest"
+
+DATA: AuthResult
+  success: boolean
+  user: User | null
+  error: string | null
+
+FUNCTION: authenticate(email, password) → AuthResult
+
+RULES:
+  - look up user by email
+  - if user not found, return failure
+  - verify password matches stored hash
+  - if password invalid, return failure
+  - return success with user data
+
+DONE_WHEN:
+  - valid credentials return user
+  - invalid credentials return error
+  - result always has either user or error, never both
+
+EXAMPLES:
+  ("alice@example.com", "correct") → { success: true, user: User, error: null }
+  ("alice@example.com", "wrong") → { success: false, user: null, error: "Invalid password" }
+  ("unknown@example.com", "any") → { success: false, user: null, error: "User not found" }
+
+ERRORS:
+  - user not found → "User not found"
+  - invalid password → "Invalid password"
+  - database unavailable → "Service temporarily unavailable"
+
+READS:
+  - Database.users
+
+CONSTRAINT: password_security
+  passwords are never logged or returned in responses</code></pre>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 3. Shopping Cart -->
+                    <div class="example-full-card">
+                        <div class="example-card-header">
+                            <h3>Shopping Cart</h3>
+                            <span class="example-tag">multi-function</span>
+                        </div>
+                        <p>Multiple related functions operating on shared data types. Shows how a single specification can define several functions that work together on the same DATA structures.</p>
+                        <details>
+                            <summary>View Specification</summary>
+                            <div class="code-example">
+                                <div class="code-header">
+                                    <span class="code-language">simplex</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>DATA: Item
+  id: string
+  name: string
+  price: number
+  quantity: number
+
+DATA: Cart
+  items: list of Item
+  total: number
+
+FUNCTION: add_to_cart(cart, item) → Cart
+
+RULES:
+  - if item already in cart, increase quantity
+  - otherwise add item to cart
+  - recalculate total
+
+DONE_WHEN:
+  - item is in cart
+  - total reflects all items
+
+EXAMPLES:
+  (empty_cart, item_a) → { items: [item_a], total: 10.00 }
+  (cart_with_a, item_a) → { items: [item_a(qty:2)], total: 20.00 }
+  (cart_with_a, item_b) → { items: [item_a, item_b], total: 25.00 }
+
+ERRORS:
+  - invalid item → "Item must have id, name, and price"
+  - negative quantity → "Quantity cannot be negative"
+
+
+FUNCTION: remove_from_cart(cart, item_id) → Cart
+
+RULES:
+  - find item by id
+  - remove it from cart
+  - recalculate total
+
+DONE_WHEN:
+  - item no longer in cart
+  - total is updated
+
+EXAMPLES:
+  (cart_with_a_and_b, "a") → { items: [item_b], total: 15.00 }
+  (cart_with_a, "a") → { items: [], total: 0.00 }
+  (empty_cart, "a") → { items: [], total: 0.00 }
+
+ERRORS:
+  - item not found → return cart unchanged (not an error)
+
+
+FUNCTION: calculate_total(cart) → number
+
+RULES:
+  - sum price × quantity for all items
+
+DONE_WHEN:
+  - total is accurate
+
+EXAMPLES:
+  (empty_cart) → 0.00
+  (cart_with_a) → 10.00
+  (cart_with_a_and_b) → 25.00
+
+ERRORS:
+  - invalid cart → 0.00</code></pre>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 4. Document Pipeline -->
+                    <div class="example-full-card">
+                        <div class="example-card-header">
+                            <h3>Document Pipeline</h3>
+                            <span class="example-tag">swarm</span>
+                        </div>
+                        <p>Swarm coordination with WRITES, TRIGGERS, and HANDOFF landmarks. Demonstrates how agents coordinate through shared memory without central orchestration.</p>
+                        <details>
+                            <summary>View Specification</summary>
+                            <div class="code-example">
+                                <div class="code-header">
+                                    <span class="code-language">simplex</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>FUNCTION: extract_text(document_path) → ExtractedContent
+
+RULES:
+  - read document from path
+  - extract text content preserving structure
+  - identify document metadata (title, author, date)
+
+DONE_WHEN:
+  - text content is extracted
+  - metadata is populated where available
+
+EXAMPLES:
+  ("report.pdf") → { text: "...", metadata: { title: "Q4 Report" } }
+  ("notes.docx") → { text: "...", metadata: { author: "Jane" } }
+  ("empty.pdf") → { text: "", metadata: {} }
+
+ERRORS:
+  - file not found → "Document not found: {path}"
+  - unsupported format → "Cannot process format: {ext}"
+  - any unhandled condition → fail with descriptive message
+
+WRITES:
+  - SharedMemory.artifacts["extracted_content"]
+  - SharedMemory.status["extraction"] = success | failure
+
+TRIGGERS:
+  - SharedMemory.queue["pending_documents"] is not empty
+  - SharedMemory.status["extraction"] != "in_progress"
+
+HANDOFF:
+  - on success: ExtractedContent ready for summarize_content
+  - on failure: error details with document path for retry queue</code></pre>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 5. Evolutionary Specification -->
+                    <div class="example-full-card">
+                        <div class="example-card-header">
+                            <h3>Evolutionary Specification</h3>
+                            <span class="example-tag">evolution</span>
+                        </div>
+                        <p>Modernizing an existing system with BASELINE and EVAL landmarks. Shows how to declare what must be preserved versus what is being evolved, with measurable evaluation criteria.</p>
+                        <details>
+                            <summary>View Specification</summary>
+                            <div class="code-example">
+                                <div class="code-header">
+                                    <span class="code-language">simplex</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code># Evolution Example
+#
+# Demonstrates BASELINE and EVAL landmarks for evolutionary specifications.
+# Use these when evolving an existing system rather than building greenfield.
+
+DATA: AuthSystem
+  session_support: boolean
+  jwt_support: boolean
+  refresh_rotation: boolean
+  rate_limiting: boolean
+
+FUNCTION: modernize_authentication(config) → AuthSystem
+
+BASELINE:
+  reference: "session-based auth, commit abc123"
+  preserve:
+    - POST /login returns { session_id, expires_at }
+    - session timeout is 30 minutes
+    - existing client SDKs continue to work
+  evolve:
+    - add JWT token issuance alongside sessions
+    - implement refresh token rotation
+    - add rate limiting on auth endpoints
+
+RULES:
+  - authenticate user credentials against user store
+  - issue JWT token with configurable expiration
+  - issue refresh token that rotates on each use
+  - maintain session-based auth for backward compatibility
+  - rate limit failed attempts per IP address
+
+DONE_WHEN:
+  - valid credentials produce both session and JWT
+  - refresh tokens rotate correctly
+  - rate limiting activates after threshold
+  - existing session-based clients unaffected
+
+EXAMPLES:
+  # Preserved behaviors (regression tests)
+  (valid_creds, session_mode) → { session_id: "...", expires_at: +30min }
+  (invalid_creds, any_mode) → { error: "unauthorized" }
+
+  # Evolved capabilities (capability tests)
+  (valid_creds, jwt_mode) → { token: "...", refresh: "...", expires_at: +1hr }
+  (expired_token, valid_refresh) → { token: "new...", refresh: "new..." }
+  (any_creds, after_rate_limit) → { error: "rate limited", retry_after: 60 }
+
+ERRORS:
+  - user store unavailable → "auth service unavailable"
+  - malformed credentials → "invalid request format"
+  - rate limit exceeded → "rate limited, retry after {seconds}"
+
+EVAL:
+  preserve: pass^3
+  evolve: pass@5
+  grading: code
+
+CONSTRAINT: backward_compatibility
+  existing v1 API clients must work without modification</code></pre>
+                            </div>
+                        </details>
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- Key Observations -->
+                <section class="doc-section">
+                    <h2>Key Observations</h2>
+
+                    <h3>Required Landmarks</h3>
+                    <p>
+                        Every function needs five landmarks: <code>FUNCTION</code>, <code>RULES</code>,
+                        <code>DONE_WHEN</code>, <code>EXAMPLES</code>, and <code>ERRORS</code>. The minimal
+                        example shows just these with no optional landmarks.
+                    </p>
+
+                    <h3>DATA Definitions</h3>
+                    <p>
+                        DATA blocks are optional. Use them when the shape of inputs or outputs would otherwise
+                        be unclear. The authentication example uses DATA to define User and AuthResult types;
+                        the minimal example omits them because string inputs and outputs are self-evident.
+                    </p>
+
+                    <h3>Example Coverage</h3>
+                    <p>
+                        Each conditional path in RULES should have at least one example. The <code>add_to_cart</code>
+                        function has three examples covering: empty cart, existing item (quantity increase),
+                        and new item. This ensures agents understand each branch.
+                    </p>
+
+                    <h3>Error Handling</h3>
+                    <p>
+                        ERRORS is required to prevent silent failures during autonomous execution. At minimum,
+                        specify default behavior for unhandled conditions. More complete specs map specific
+                        failure modes to specific responses.
+                    </p>
+
+                    <h3>Boundaries and Confidence</h3>
+                    <p>
+                        <code>NOT_ALLOWED</code> establishes explicit boundaries—what the function must never do.
+                        <code>UNCERTAIN</code> defines thresholds for when agents should signal low confidence
+                        rather than proceeding silently. The authentication example shows both: never log passwords,
+                        and flag unusual login patterns for review.
+                    </p>
+
+                    <h3>Swarm Coordination</h3>
+                    <p>
+                        For multi-agent workflows, <code>WRITES</code> declares shared state the function produces,
+                        <code>TRIGGERS</code> defines when an agent should pick up work, and <code>HANDOFF</code>
+                        describes what the next stage receives. The document pipeline example demonstrates all three,
+                        enabling agents to coordinate without central orchestration.
+                    </p>
+
+                    <h3>Evolutionary Specifications</h3>
+                    <p>
+                        When evolving existing systems rather than building greenfield, use <code>BASELINE</code>
+                        and <code>EVAL</code> to declare what must be preserved versus what is being evolved.
+                    </p>
+                    <p>
+                        <code>BASELINE</code> contains three fields: <code>reference</code> (the prior state),
+                        <code>preserve</code> (behaviors that must not regress), and <code>evolve</code>
+                        (capabilities being added or changed).
+                    </p>
+                    <p>
+                        <code>EVAL</code> declares how to measure success using two threshold notations:
+                        <code>pass^k</code> means all k trials must pass (for regression tests), while
+                        <code>pass@k</code> means at least one of k trials must pass (for capability tests).
+                        The <code>grading</code> field specifies evaluation approach: <code>code</code> for
+                        deterministic comparison, <code>model</code> for LLM-as-judge, or <code>outcome</code>
+                        for verifying state changes.
+                    </p>
+                    <p>
+                        EVAL is required when BASELINE is present. This ensures evolutionary specs always
+                        define how preservation and progress are measured.
+                    </p>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/spec">Specification</a></li>
+                        <li><a href="/examples">Examples</a></li>
+                        <li><a href="/quickstart">Quick Start</a></li>
+                        <li><a href="/planner">Planner</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/brannn/simplex" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/QUICKSTART.md" target="_blank">Quick Start Guide</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/spec/simplex.md" target="_blank">Canonical Spec</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Simplex v0.5</h4>
+                    <p class="footer-text">A workflow specification for autonomous agents.</p>
+                    <p class="footer-text footer-license">Released under the MIT License</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+</body>
+</html>
