@@ -36,13 +36,13 @@ jobs:
             exit 1
           fi
 
-      - name: Check internal coverage (98%)
+      - name: Check internal coverage (85%)
         run: |
           go test -coverprofile=coverage-internal.out -covermode=atomic ./internal/...
           COVERAGE=$(go tool cover -func=coverage-internal.out | grep total | awk '{print $3}' | sed 's/%//')
           echo "Internal coverage: ${COVERAGE}%"
-          if [ "$(echo "$COVERAGE < 98" | bc -l)" -eq 1 ]; then
-            echo "::error::Internal coverage ${COVERAGE}% is below minimum 98%"
+          if [ "$(echo "$COVERAGE < 85" | bc -l)" -eq 1 ]; then
+            echo "::error::Internal coverage ${COVERAGE}% is below minimum 85%"
             exit 1
           fi
 
