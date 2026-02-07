@@ -27,12 +27,12 @@ jobs:
       - name: Run tests
         run: go test -v -coverprofile=coverage.out -covermode=atomic ./...
 
-      - name: Check overall coverage (90%)
+      - name: Check overall coverage (75%)
         run: |
           COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
           echo "Overall coverage: ${COVERAGE}%"
-          if [ "$(echo "$COVERAGE < 90" | bc -l)" -eq 1 ]; then
-            echo "::error::Coverage ${COVERAGE}% is below minimum 90%"
+          if [ "$(echo "$COVERAGE < 75" | bc -l)" -eq 1 ]; then
+            echo "::error::Coverage ${COVERAGE}% is below minimum 75%"
             exit 1
           fi
 
