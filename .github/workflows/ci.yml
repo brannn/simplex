@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: lint/go.sum
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test -v -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Check overall coverage (90%)
+        run: |
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+          echo "Overall coverage: ${COVERAGE}%"
+          if [ "$(echo "$COVERAGE < 90" | bc -l)" -eq 1 ]; then
+            echo "::error::Coverage ${COVERAGE}% is below minimum 90%"
+            exit 1
+          fi
+
+      - name: Check internal coverage (98%)
+        run: |
+          go test -coverprofile=coverage-internal.out -covermode=atomic ./internal/...
+          COVERAGE=$(go tool cover -func=coverage-internal.out | grep total | awk '{print $3}' | sed 's/%//')
+          echo "Internal coverage: ${COVERAGE}%"
+          if [ "$(echo "$COVERAGE < 98" | bc -l)" -eq 1 ]; then
+            echo "::error::Internal coverage ${COVERAGE}% is below minimum 98%"
+            exit 1
+          fi
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: lint/go.sum
+
+      - name: Build linter
+        run: go build -o simplex-lint ./cmd/simplex-lint
+
+  vet:
+    name: Vet
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: lint/go.sum
+
+      - name: Vet
+        run: go vet ./...
+
+  lint-examples:
+    name: Lint Examples
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: lint/go.sum
+
+      - name: Build linter
+        run: cd lint && go build -o ../simplex-lint ./cmd/simplex-lint
+
+      - name: Lint all example specs
+        run: |
+          echo "Linting example specifications..."
+          FAILED=0
+          for f in examples/*.simplex; do
+            echo ""
+            echo "--- $f ---"
+            if ./simplex-lint "$f"; then
+              echo "PASS: $f"
+            else
+              echo "FAIL: $f"
+              FAILED=1
+            fi
+          done
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo ""
+          echo "All examples pass validation."

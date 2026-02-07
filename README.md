@@ -1,8 +1,11 @@
 # Simplex
 
-A workflow specification for autonomous agents.
+[![CI](https://github.com/brannn/simplex/actions/workflows/ci.yml/badge.svg)](https://github.com/brannn/simplex/actions/workflows/ci.yml)
+[![Spec](https://img.shields.io/badge/spec-v0.5-da7756)](https://simplex-spec.org/spec)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Examples](https://img.shields.io/badge/examples-4_specs-green)](https://simplex-spec.org/examples)
 
-Version 0.5
+A workflow specification for autonomous agents.
 
 ---
 
