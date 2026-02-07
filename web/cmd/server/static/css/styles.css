@@ -11,7 +11,7 @@
     --accent-warm: #e8956e;
     --accent-amber: #d4956b;
     --accent-rust: #c4603e;
-    --gradient-bg: linear-gradient(180deg, #0a0a0f 0%, #0d1520 25%, #1a2a40 50%, #3a2520 75%, #5a3828 100%);
+    --gradient-bg: linear-gradient(180deg, #0a0a0f 0%, #0d1520 25%, #1a2a40 50%, #162030 75%, #111820 100%);
     --success-color: #10b981;
     --error-color: #ef4444;
 }
@@ -242,6 +242,10 @@ textarea::placeholder { color: rgba(255, 255, 255, 0.3); }
 @keyframes dotPulse {
     0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
     40% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes softPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 .chat-message-user {
     background: rgba(218, 119, 86, 0.15);
