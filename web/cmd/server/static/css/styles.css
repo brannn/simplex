@@ -66,14 +66,13 @@ body {
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     text-decoration: none;
 }
 
 .nav-logo-icon {
     height: 22px;
     width: auto;
-    margin-right: -0.1rem;
+    margin-right: 6px;
 }
 
 .logo-text {
@@ -88,15 +87,17 @@ body {
 
 .version-badge {
     display: inline-block;
-    padding: 0.1rem 0.4rem;
-    font-size: 0.6rem;
-    font-weight: 700;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    padding: 1px 5px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0;
+    align-self: flex-end;
     background: rgba(218, 119, 86, 0.2);
     color: var(--accent-warm);
-    border-radius: 0.25rem;
-    border: 1px solid rgba(232, 149, 110, 0.3);
-    position: relative;
-    top: 0.075rem;
+    border-radius: 3px;
+    border: 1px solid rgba(232, 149, 110, 0.25);
 }
 
 .nav-links {
