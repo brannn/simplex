@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="planner-body">
+<body>
     <div id="app">
         <!-- Navigation -->
         <nav class="nav">
@@ -42,28 +42,28 @@
             </div>
         </nav>
 
-        <!-- Main content -->
-        <main class="planner-main">
-            <!-- Describe Step -->
-            <div class="wizard-step" id="step-describe">
-                <div class="describe-center">
-                    <h1 class="planner-title">Draft a Simplex specification</h1>
-                    <p class="planner-subtitle">Describe what you want to build.</p>
+        <!-- Content -->
+        <main class="doc-content">
+            <div class="doc-container">
+                <h1 class="doc-title">Planner</h1>
+                <p class="doc-intro">Describe what you want to build. This tool drafts a Simplex specification through conversation.</p>
 
-                    <div class="describe-input-wrap">
-                        <div class="type-toggle">
-                            <button class="type-toggle-option active" id="type-greenfield" onclick="setProjectType('greenfield')" title="New project from scratch">Greenfield</button>
-                            <button class="type-toggle-option" id="type-brownfield" onclick="setProjectType('brownfield')" title="Evolving an existing system">Brownfield</button>
-                        </div>
-                        <textarea
-                            id="describe-input"
-                            placeholder="A function that authenticates users by email and password, returning user data on success or an error on failure..."
-                            rows="4"
-                        ></textarea>
+                <!-- Describe Step -->
+                <div class="wizard-step" id="step-describe">
+                    <div class="type-toggle">
+                        <button class="type-toggle-option active" id="type-greenfield" onclick="setProjectType('greenfield')" title="New project from scratch">Greenfield</button>
+                        <button class="type-toggle-option" id="type-brownfield" onclick="setProjectType('brownfield')" title="Evolving an existing system">Brownfield</button>
                     </div>
 
-                    <div class="describe-actions">
+                    <textarea
+                        id="describe-input"
+                        placeholder="A function that authenticates users by email and password, returning user data on success or an error on failure..."
+                        rows="6"
+                    ></textarea>
+
+                    <div class="planner-controls">
                         <div class="example-pills">
+                            <span class="example-pills-label">Try an example:</span>
                             <button class="example-pill" onclick="loadExample('minimal')">Minimal</button>
                             <button class="example-pill" onclick="loadExample('auth')">Auth</button>
                             <button class="example-pill" onclick="loadExample('cart')">Cart</button>
@@ -74,29 +74,23 @@
                         </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Refine Step -->
-            <div class="wizard-step hidden" id="step-refine">
-                <div class="refine-layout">
+                <!-- Refine Step -->
+                <div class="wizard-step hidden" id="step-refine">
                     <div class="chat-messages" id="chat-messages"></div>
-                    <div class="chat-input-area">
-                        <div class="chat-input-container">
-                            <textarea
-                                id="chat-input"
-                                placeholder="Type your response..."
-                                rows="2"
-                            ></textarea>
-                            <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
-                        </div>
-                        <a class="skip-link" href="javascript:void(0)" onclick="goToStep('generate')">Skip to generation &rarr;</a>
+                    <div class="chat-input-container">
+                        <textarea
+                            id="chat-input"
+                            placeholder="Type your response..."
+                            rows="3"
+                        ></textarea>
+                        <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
                     </div>
+                    <a class="skip-link" href="javascript:void(0)" onclick="goToStep('generate')">Skip to generation &rarr;</a>
                 </div>
-            </div>
 
-            <!-- Generate Step -->
-            <div class="wizard-step hidden" id="step-generate">
-                <div class="generate-layout">
+                <!-- Generate Step -->
+                <div class="wizard-step hidden" id="step-generate">
                     <div class="spec-output" id="spec-output"></div>
 
                     <details class="lint-results" id="lint-results" style="display: none;">
@@ -248,6 +242,35 @@
                 </div>
             </div>
         </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/spec">Specification</a></li>
+                        <li><a href="/examples">Examples</a></li>
+                        <li><a href="/quickstart">Quick Start</a></li>
+                        <li><a href="/planner">Planner</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/brannn/simplex" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/QUICKSTART.md" target="_blank">Quick Start Guide</a></li>
+                        <li><a href="https://github.com/brannn/simplex/blob/main/spec/simplex.md" target="_blank">Canonical Spec</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Simplex v0.5</h4>
+                    <p class="footer-text">A workflow specification for autonomous agents.</p>
+                    <p class="footer-text footer-license">Released under the MIT License</p>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script src="js/common.js"></script>
