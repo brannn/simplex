@@ -846,8 +846,8 @@ textarea::placeholder {
 }
 
 .collapsible-code .code-example pre {
-    max-height: 280px;
-    overflow: hidden;
+    max-height: 280px !important;
+    overflow: hidden !important;
 }
 
 .collapsible-code-fade {
