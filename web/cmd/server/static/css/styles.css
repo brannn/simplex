@@ -1471,6 +1471,11 @@ textarea::placeholder { color: rgba(255, 255, 255, 0.3); }
     font-weight: 600;
     color: var(--accent-orange);
 }
+.spec-toc strong::after {
+    content: " \00b7  ";
+    color: var(--text-secondary);
+    font-weight: 400;
+}
 
 .spec-toc ul {
     list-style: none;
