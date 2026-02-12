@@ -36,3 +36,7 @@ Gemfile.lock
 
 # Planning (internal drafts)
 planning/
+
+# Proposals (internal demos - bundled but not tracked)
+proposals/simplex-overview.js
+proposals/simplex-overview.jsx

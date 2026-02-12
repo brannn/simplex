@@ -72,6 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(() => {});
     }
+
+    // Add floating overview badge (except on overview page itself)
+    if (!window.location.pathname.includes('/overview')) {
+        const badgeContainer = document.createElement('div');
+        badgeContainer.className = 'overview-badge';
+
+        const badgeLink = document.createElement('a');
+        badgeLink.href = '/overview';
+        badgeLink.className = 'overview-badge-inner';
+        badgeLink.innerHTML = '<span class="overview-badge-icon">▶</span><span>Simplex in 5 Minutes</span>';
+
+        badgeContainer.appendChild(badgeLink);
+        document.body.appendChild(badgeContainer);
+    }
 });
 
 // Smooth scroll with offset for fixed navbar

@@ -18,6 +18,10 @@ RUN go mod download
 # Copy web source code
 COPY web/ ./
 
+# Copy proposals directory for bundling (simplex-overview.js)
+COPY proposals/ /app/proposals/
+RUN cp /app/proposals/simplex-overview.js ./cmd/server/static/js/simplex-overview.js || true
+
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o simplex-web ./cmd/server
 
