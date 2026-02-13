@@ -1,7 +1,7 @@
 // Planner application JavaScript
 // Depends on: simplex-spec.js (system prompt constants)
 
-const MODEL_NAME = 'zai-org/GLM-4.7';
+const MODEL_NAME = 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo';
 
 // State management
 const state = {
