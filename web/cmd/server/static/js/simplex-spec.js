@@ -303,6 +303,15 @@ const BASE_SYSTEM_PROMPT = `Generate Simplex v0.5 specifications. Follow this st
 - Every branch needs an example
 - Always end ERRORS with: "any unhandled condition → fail with descriptive message"
 
+**Optional landmarks (inside FUNCTION, use when spec requires):**
+- READS: Shared memory this function consumes (multi-agent coordination)
+- WRITES: Shared memory this function produces (multi-agent coordination)
+- TRIGGERS: Conditions for when agents should execute this work
+- NOT_ALLOWED: Implementation boundaries and forbidden actions
+- HANDOFF: What passes to next agent/stage on success/failure
+- UNCERTAIN: Conditions for signaling low confidence to coordinating agents
+- DETERMINISM: Output variance requirements (strict/structural/semantic)
+
 **EXAMPLES:**
 
 Minimal spec:
