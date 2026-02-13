@@ -287,131 +287,72 @@ CONSTRAINT: backward_compatibility
   existing v1 API clients must work without modification`;
 
 // System prompt for generation (used with temperature 0.3, max_tokens 2048)
-const BASE_SYSTEM_PROMPT = `Simplex is a specification language for describing work that autonomous AI agents will perform to develop software systems and artifacts. It translates human requirements into precise, unambiguous specifications that AI agents can interpret and execute.
+const BASE_SYSTEM_PROMPT = `Generate Simplex v0.5 specifications. Follow this structure exactly:
 
-You are an expert Simplex specification generator. You must generate specifications that strictly follow the Simplex v0.5 specification.
+**STRUCTURE (CRITICAL):**
+1. DATA blocks (if custom types needed) - at top level
+2. FUNCTION: name(inputs) → return_type
+3. RULES: (inside FUNCTION) - what it does
+4. DONE_WHEN: (inside FUNCTION) - completion criteria
+5. EXAMPLES: (inside FUNCTION) - input/output pairs
+6. ERRORS: (inside FUNCTION) - error conditions
 
-${SIMPLEX_FULL_SPEC}
+**RULES:**
+- Count "if" conditions in RULES
+- Provide AT LEAST that many EXAMPLES
+- Every branch needs an example
+- Always end ERRORS with: "any unhandled condition → fail with descriptive message"
 
-## Reference Examples
+**EXAMPLES:**
 
-Here is a minimal valid specification:
+Minimal spec:
 \`\`\`
-${MINIMAL_EXAMPLE}
-\`\`\`
-
-Here is a more complex specification with DATA types and multiple functions:
-\`\`\`
-${COMPLEX_EXAMPLE}
-\`\`\`
-
-## CRITICAL: Common Mistakes to Avoid
-
-**❌ WRONG - Landmarks outside FUNCTION block:**
-\`\`\`
-RULES:
-  - if user exists, authenticate them
-
-FUNCTION: login(email, password) → session
-\`\`\`
-This will FAIL linting. RULES must be INSIDE the FUNCTION block.
-
-**✅ CORRECT - Landmarks inside FUNCTION block:**
-\`\`\`
-FUNCTION: login(email, password) → session
+FUNCTION: add(a, b) → sum
 
 RULES:
-  - if user exists, authenticate them
-  - if credentials valid, create session
+  - if both inputs are numbers, return their sum
+  - if either input is not a number, fail
 
 DONE_WHEN:
-  - session created with valid expiration
+  - result is the arithmetic sum of a and b
 
 EXAMPLES:
-  ("user@example.com", "pass123") → Session{id: "...", expires: ...}
+  (2, 3) → 5
+  (-1, 1) → 0
+  ("text", 1) → Error: non-numeric input
 
 ERRORS:
-  - invalid credentials → fail with "authentication failed"
+  - non-numeric input → fail with "input must be numeric"
   - any unhandled condition → fail with descriptive message
 \`\`\`
 
-**❌ WRONG - Undefined DATA type:**
-\`\`\`
-FUNCTION: add_item(cart, item) → updated cart
-\`\`\`
-"updated cart" is not a recognized type. You must define it.
-
-**✅ CORRECT - Define DATA types before use:**
+With DATA types:
 \`\`\`
 DATA: Cart
   items: list of Item
   total: number
 
-FUNCTION: add_item(cart, item) → Cart
+FUNCTION: add_item(cart: Cart, item: Item) → Cart
 
 RULES:
-  - add item to cart items list
-  - recalculate total
+  - if cart is empty, create new cart with item
+  - if cart has items and item exists, increment quantity
+  - if cart has items and item is new, append to list
 
 DONE_WHEN:
   - item appears in cart
-  - total reflects new item price
+  - total reflects item price
 
 EXAMPLES:
-  (Cart{items: [], total: 0}, Item{price: 10}) → Cart{items: [Item], total: 10}
+  (Cart{items: [], total: 0}, Item{id: 1, price: 10}) → Cart{items: [Item{id:1, qty:1}], total: 10}
+  (Cart{items: [Item{id:1, qty:1}], total: 10}, Item{id:1, price: 10}) → Cart{items: [Item{id:1, qty:2}], total: 20}
+  (Cart{items: [Item{id:1, qty:1}], total: 10}, Item{id:2, price: 5}) → Cart{items: [Item{id:1, qty:1}, Item{id:2, qty:1}], total: 15}
 
 ERRORS:
   - any unhandled condition → fail with descriptive message
 \`\`\`
 
-**❌ WRONG - Insufficient example coverage:**
-\`\`\`
-RULES:
-  - if cart is empty, create new cart with item
-  - if cart has items, append item to list
-  - if item already exists, increment quantity
-
-EXAMPLES:
-  (empty_cart, item) → cart with one item
-  (cart_with_items, new_item) → cart with added item
-\`\`\`
-This has 3 branches but only 2 examples. WILL FAIL with E012 error.
-
-**✅ CORRECT - Complete example coverage:**
-\`\`\`
-RULES:
-  - if cart is empty, create new cart with item
-  - if cart has items, append item to list
-  - if item already exists, increment quantity
-
-EXAMPLES:
-  (empty_cart, item) → cart with one item
-  (cart_with_items, new_item) → cart with added item
-  (cart_with_items, existing_item) → cart with incremented quantity
-\`\`\`
-3 branches = 3 examples. Every conditional path is covered.
-
-## Generation Instructions
-
-Based on the user's description and any refinement conversation, generate a complete Simplex specification that:
-
-1. **CRITICAL STRUCTURE RULE**: All required landmarks (RULES, DONE_WHEN, EXAMPLES, ERRORS) MUST appear INSIDE a FUNCTION block, immediately after the FUNCTION declaration. They are NOT top-level landmarks. See the reference examples above for correct structure.
-
-2. **Top-level landmarks**: Only DATA and CONSTRAINT appear at the top level (outside FUNCTION blocks). Everything else goes inside FUNCTION blocks.
-
-3. **DATA types**: When using custom types in FUNCTION signatures (like "updated cart" or "PolicyRule"), you MUST define them with a DATA block BEFORE the FUNCTION that uses them. Never reference undefined types. Use simple types (list, number, string, boolean) when they suffice.
-
-4. **Example coverage (CRITICAL)**: Count the "if" statements in RULES. You MUST provide at least that many EXAMPLES. Each conditional branch needs its own example. If RULES has 3 "if" conditions, you need AT LEAST 3 examples. This is strictly enforced - specs with fewer examples than branches will FAIL with E012 error.
-
-5. **Error handling**: Always include the catch-all error handler: "any unhandled condition → fail with descriptive message"
-
-6. **Complexity limits**:
-   - Maximum 15 RULES items per function
-   - Maximum 6 function inputs
-   - Maximum 200 characters per single rule item
-   - If more complex, decompose into multiple functions
-
-**Output format**: Generate ONLY the specification. No explanations, no markdown code blocks, no surrounding text. Output the raw Simplex spec text directly.`;
+**Output ONLY the spec. No explanations. No markdown blocks. Raw text only.`;
 
 
 // Appended to BASE_SYSTEM_PROMPT when brownfield project type is selected
