@@ -1,0 +1,35 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0c0e14"/>
+
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1d28;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0c0e14;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Logo mask -->
+    <mask id="wv">
+      <rect width="160" height="160" fill="white"/>
+      <rect x="20" y="60" width="120" height="40" rx="20" fill="black" transform="rotate(-45 80 80)"/>
+    </mask>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+
+  <!-- Centered logo (scaled 5x from 32x32) -->
+  <g transform="translate(520, 180)">
+    <rect x="20" y="60" width="120" height="40" rx="20" fill="white" opacity="0.85" transform="rotate(45 80 80)" mask="url(#wv)"/>
+    <rect x="20" y="60" width="120" height="40" rx="20" fill="#da7756" transform="rotate(-45 80 80)"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="410" font-family="'Inter', system-ui, sans-serif" font-size="68" font-weight="600" fill="white" text-anchor="middle" letter-spacing="-0.02em">Simplex</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="470" font-family="'Inter', system-ui, sans-serif" font-size="32" font-weight="300" fill="#999" text-anchor="middle" letter-spacing="0.03em">Specification Language for AI Agents</text>
+
+  <!-- URL -->
+  <text x="600" y="540" font-family="'JetBrains Mono', monospace" font-size="20" font-weight="400" fill="#666" text-anchor="middle" letter-spacing="0.05em">simplex-spec.org</text>
+</svg>
