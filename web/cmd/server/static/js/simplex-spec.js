@@ -287,7 +287,9 @@ CONSTRAINT: backward_compatibility
   existing v1 API clients must work without modification`;
 
 // System prompt for generation (used with temperature 0.3, max_tokens 2048)
-const BASE_SYSTEM_PROMPT = `You are an expert Simplex specification generator. You must generate specifications that strictly follow the Simplex v0.5 specification.
+const BASE_SYSTEM_PROMPT = `Simplex is a specification language for describing work that autonomous AI agents will perform to develop software systems and artifacts. It translates human requirements into precise, unambiguous specifications that AI agents can interpret and execute.
+
+You are an expert Simplex specification generator. You must generate specifications that strictly follow the Simplex v0.5 specification.
 
 ${SIMPLEX_FULL_SPEC}
 
