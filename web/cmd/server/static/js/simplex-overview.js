@@ -696,9 +696,18 @@ function init() {
 
   app.appendChild(progressBar);
 
+  // Breadcrumb return link
+  const breadcrumb = document.createElement('a');
+  breadcrumb.href = '/';
+  breadcrumb.style.cssText = "position:fixed;top:22px;left:16px;z-index:10;font-size:10px;letter-spacing:1px;color:#555;font-family:'JetBrains Mono',monospace;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:6px";
+  breadcrumb.innerHTML = '<span style="font-size:12px">←</span><span>simplex-spec.org</span>';
+  breadcrumb.addEventListener('mouseenter', () => breadcrumb.style.color = '#8af');
+  breadcrumb.addEventListener('mouseleave', () => breadcrumb.style.color = '#555');
+  app.appendChild(breadcrumb);
+
   // Episode labels
   const labels = document.createElement('div');
-  labels.style.cssText = 'position:fixed;top:22px;left:16px;right:16px;z-index:10;display:flex;justify-content:space-between';
+  labels.style.cssText = 'position:fixed;top:22px;right:16px;z-index:10;display:flex;gap:16px;align-items:center';
 
   const numLabel = document.createElement('span');
   numLabel.id = 'episode-number';
