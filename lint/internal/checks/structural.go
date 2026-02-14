@@ -4,8 +4,8 @@ package checks
 import (
 	"fmt"
 
-	"github.com/brannn/simplex/lint/internal/parser"
-	"github.com/brannn/simplex/lint/internal/result"
+	"github.com/thinkwright/simplex/lint/internal/parser"
+	"github.com/thinkwright/simplex/lint/internal/result"
 )
 
 // StructuralChecker performs structural validation of Simplex specs.

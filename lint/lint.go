@@ -2,9 +2,9 @@
 package lint
 
 import (
-	"github.com/brannn/simplex/lint/internal/checks"
-	"github.com/brannn/simplex/lint/internal/parser"
-	"github.com/brannn/simplex/lint/internal/result"
+	"github.com/thinkwright/simplex/lint/internal/checks"
+	"github.com/thinkwright/simplex/lint/internal/parser"
+	"github.com/thinkwright/simplex/lint/internal/result"
 )
 
 // Result is a linting result for a single spec.

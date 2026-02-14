@@ -4,7 +4,7 @@ VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev
 BINARY := simplex-lint
 BUILD_DIR := ./build
 LINT_DIR := ./lint
-GO_MODULE := github.com/brannn/simplex/lint
+GO_MODULE := github.com/thinkwright/simplex/lint
 
 .PHONY: all build test lint clean release gh-pages help
 

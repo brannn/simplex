@@ -3,8 +3,8 @@ package checks
 import (
 	"testing"
 
-	"github.com/brannn/simplex/lint/internal/parser"
-	"github.com/brannn/simplex/lint/internal/result"
+	"github.com/thinkwright/simplex/lint/internal/parser"
+	"github.com/thinkwright/simplex/lint/internal/result"
 )
 
 func TestEvolutionChecker_BaselineWithoutEval(t *testing.T) {

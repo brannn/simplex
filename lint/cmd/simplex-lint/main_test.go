@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/brannn/simplex/lint/internal/result"
+	"github.com/thinkwright/simplex/lint/internal/result"
 )
 
 func TestNewLinter(t *testing.T) {

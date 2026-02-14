@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch GitHub star count
     const starEl = document.getElementById('github-stars');
     if (starEl) {
-        fetch('https://api.github.com/repos/brannn/simplex')
+        fetch('https://api.github.com/repos/thinkwright/simplex')
             .then(r => r.json())
             .then(data => {
                 if (data.stargazers_count != null) {

@@ -8,9 +8,9 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/brannn/simplex/lint/internal/checks"
-	"github.com/brannn/simplex/lint/internal/parser"
-	"github.com/brannn/simplex/lint/internal/result"
+	"github.com/thinkwright/simplex/lint/internal/checks"
+	"github.com/thinkwright/simplex/lint/internal/parser"
+	"github.com/thinkwright/simplex/lint/internal/result"
 )
 
 // version is set at build time via ldflags

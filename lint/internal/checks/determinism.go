@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/brannn/simplex/lint/internal/parser"
-	"github.com/brannn/simplex/lint/internal/result"
+	"github.com/thinkwright/simplex/lint/internal/parser"
+	"github.com/thinkwright/simplex/lint/internal/result"
 )
 
 // DeterminismChecker performs validation of DETERMINISM landmarks.
