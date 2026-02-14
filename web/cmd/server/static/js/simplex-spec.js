@@ -298,11 +298,13 @@ const BASE_SYSTEM_PROMPT = `Generate Simplex v0.5 specifications. Follow this st
 6. ERRORS: (inside FUNCTION) - error conditions
 
 **CRITICAL RULES:**
-1. Count EVERY "if" condition in RULES (including "if not", "if no", "if empty", etc.)
-2. You MUST provide EXACTLY that many EXAMPLES (or more)
-3. Each conditional branch = one example. 6 branches = 6 examples minimum
-4. This is STRICTLY ENFORCED - specs will FAIL validation if examples < branches
-5. Always end ERRORS with: "any unhandled condition → fail with descriptive message"
+1. Write simple, flat RULES - one condition per rule
+2. Avoid compound conditions like "if A and B" - split into separate rules
+3. Count total "if" statements = minimum EXAMPLES needed
+4. EVERY rule with "if" needs an example showing that path
+5. Add 1-2 extra examples to be safe - better too many than too few
+6. STRICTLY ENFORCED - specs FAIL if examples < branches
+7. Always end ERRORS with: "any unhandled condition → fail with descriptive message"
 
 **Optional landmarks (inside FUNCTION, use when spec requires):**
 - READS: Shared memory this function consumes (multi-agent coordination)
@@ -336,22 +338,27 @@ ERRORS:
   - any unhandled condition → fail with descriptive message
 \`\`\`
 
-With DATA types:
+With DATA types (note: flat, simple rules):
 \`\`\`
 DATA: Cart
   items: list of Item
   total: number
 
+DATA: Item
+  id: integer
+  price: number
+
 FUNCTION: add_item(cart: Cart, item: Item) → Cart
 
 RULES:
   - if cart is empty, create new cart with item
-  - if cart has items and item exists, increment quantity
-  - if cart has items and item is new, append to list
+  - if item already in cart, increment its quantity
+  - if item not in cart, append to items list
+  - recalculate total price
 
 DONE_WHEN:
-  - item appears in cart
-  - total reflects item price
+  - item appears in cart with correct quantity
+  - total reflects all item prices
 
 EXAMPLES:
   (Cart{items: [], total: 0}, Item{id: 1, price: 10}) → Cart{items: [Item{id:1, qty:1}], total: 10}
